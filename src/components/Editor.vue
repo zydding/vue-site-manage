@@ -80,8 +80,9 @@ export default {
                     }
                 }
             },
-            serverUrl: this.baseServerUrl + "/fileUpload/uploadPic?filepath=artwork", // 这里写你要上传的图片服务器地址
+            serverUrl: "/api/file/upload", // 这里写你要上传的图片服务器地址
             header: {
+                "Zeke_Up": 1,
                 // token: sessionStorage.token
             } // 有的图片服务器要求请求头需要有token
         };
@@ -113,11 +114,11 @@ export default {
             // 获取富文本组件实例
             let quill = this.$refs.myQuillEditor.quill;
             // 如果上传成功
-            if (res.code == 1) {
+            if (res.length>0) {
                 // 获取光标所在位置
                 let length = quill.getSelection().index;
                 // 插入图片  res.url为服务器返回的图片地址
-                quill.insertEmbed(length, "image", res.url);
+                quill.insertEmbed(length, "image", "/api/file/view?id="+res[0].id);
                 // 调整光标到最后
                 quill.setSelection(length + 1);
             } else {
