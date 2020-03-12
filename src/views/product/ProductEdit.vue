@@ -46,7 +46,7 @@
             </el-col>
             <el-col :span="24">
                 <el-form-item label="预览图片">
-                    <el-upload class="upload-demo" :data="fileData" :action="upAction" :before-upload="beforeAvatarUpload" :file-list="fileList" :on-remove="handleRemove" :multiple="false"
+                    <el-upload class="upload-demo" :headers="headers" :data="fileData" :action="upAction" :before-upload="beforeAvatarUpload" :file-list="fileList" :on-remove="handleRemove" :multiple="false"
                         list-type="picture" :on-success="handleAvatarSuccess">
                         <el-button style="margin:10px 0px 10px 10px;" size="small" icon="el-icon-plus" type="primary">选择附件</el-button>
                     </el-upload>
@@ -77,10 +77,7 @@ export default {
             fileData: {},
             fileList: [],
             queryInfo: {},
-            currentRow: {
-                imageId: '',
-                imageUrl: ''
-            },
+            headers: {"Zeke_Up": 1}
         }
     },
     created() {
@@ -123,27 +120,30 @@ export default {
                 "/api/product/" + row.id
             ).then(res => {
                 this.form = res.data;
+                this.getFileList(res.data.fileId)
             }).catch(err => {
                 // this.$message.error(err)
             })
         },
         //获取id
         getFileList(formId) {
-            this.fileList = [];
             this.$axios.get(
-                "/fs/files/search?metaData.formId=" + formId
+                "/api/file/getFileList?page=1&row=100&id=" + formId
             ).then(res => {
-                res.data.forEach((item) => {
-                    let file = {
-                        name: item.filename,
-                        id: item.id,
-                        url: "/fs/files/view?metaData.formId=" + formId + "&id=" + item.id,
-                    }
-                    this.fileList.push(file);
-                })
+                if(res.data.totalPages>0){
+                    res.data.content.map((item)=>{
+                        let file = {
+                            name: item.originalName,
+                            id: item.id,
+                            url: "/api/file/view?id=" + formId,
+                        }
+                        this.fileList.push(file);
+                    })
+                }
             }).catch(err => {
                 // this.$message.error(err)
             })
+            
         },
 
         //上传前校验
@@ -162,8 +162,7 @@ export default {
         handleRemove(file, fileList) {
             this.$axios({
                 method: 'delete',
-                url: "/fs/files/delete/" + file.id,
-                dataType: 'text'
+                url: "/api/file/deleteFileList?id=" + file.id,
             }).then(res => {
                 // console.log(res);
                 this.fileList.forEach((item, index) => {
