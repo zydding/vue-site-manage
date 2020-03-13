@@ -29,22 +29,29 @@ export default {
     clickLogin(userInfo) {
       sessionStorage.setItem("isLogin", true);
       this.$axios
-        .post("/api/login/check", userInfo)
+        .post("/api/login/check?code="+ userInfo.code+"&pwd="+ userInfo.pwd)
         .then(response => {
-          if (response.data.succeed) {
+          // console.log(response);
+          if (response.data) {
             setToken(response.data.data.name, response.data.data);
             setLoginToken(response.headers.token)
             window.sessionStorage["tempFlag"] = true;
             // console.log(localStorage.getItem('Admin-Msg'))
             sessionStorage.setItem("logined", true);
             this.$router.push('home');
-          } else {
-            this.$message.error(response.data.msg ? response.data.msg : "失败");
+          }else{
+            if(response.status==244){
+                //用户密码错误
+                this.$message.error("用户密码错误,或者停用");
+            }else{
+              this.$message.error("异常！!失败");
+              // console.log("error:" + error.toString());
+            }
           }
         })
         .catch(error => {
-          this.$message.error("异常！");
-          console.log("error:" + error.toString());
+            this.$message.error("异常！");
+            console.log("error:" + error.toString());
         });
     }
   },

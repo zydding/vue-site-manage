@@ -1,6 +1,6 @@
 <template>
   <div class="footer">
-    @Copyright © 2019-2020 www.zydding.com. All Rights Reserved.
+    @Copyright © 2019-2020 www.zekeup.com. All Rights Reserved.
   </div>
 </template>
 

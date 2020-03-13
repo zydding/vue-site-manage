@@ -64,7 +64,15 @@ var routers =[
     //   requireAuth: true
     // },
     component: () => import('./views/product/ProductView.vue')
-  }
+  },
+  {
+    path: '/userIndex',
+    name: '用户',
+    // meta: {
+    //   requireAuth: true
+    // },
+    component: () => import('./views/user/UserIndex.vue')
+  },
 ]
 
 var router_ = new Router({

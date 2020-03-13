@@ -10,8 +10,8 @@
           @submit.native.prevent="login"
         >
           <h2>登录</h2>
-          <el-form-item prop="username">
-            <el-input v-model="model.username" placeholder="请输入用户名" prefix-icon="el-icon-user-solid"></el-input>
+          <el-form-item prop="code">
+            <el-input v-model="model.code" placeholder="请输入用户名" prefix-icon="el-icon-user-solid"></el-input>
           </el-form-item>
           <el-form-item prop="password">
             <el-input
@@ -63,17 +63,17 @@ export default {
   data() {
     return {
       validCredentials: {
-        username: "lightscope",
+        code: "lightscope",
         password: "lightscope"
       },
       model: {
-        username: "",
+        code: "",
         password: ""
       },
       loading: false,
       //输入限制规则
       rules: {
-        username: [
+        code: [
           {
             required: true,
             message: "用户名不能为空",
@@ -94,7 +94,7 @@ export default {
       }
       //check-login
       this.$emit("clickLogin", {
-        user: this.model.username,
+        code: this.model.code,
         pwd: this.model.password
       });
     }
