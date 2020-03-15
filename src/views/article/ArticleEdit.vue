@@ -2,7 +2,7 @@
     <el-container style="padding: 20px; flex-direction: column;">
         <el-row style="margin: 0 0 30px;">
             <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/articleIndex'}">新闻发布</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: './articleIndex'}">新闻发布</el-breadcrumb-item>
                 <el-breadcrumb-item>通知公告</el-breadcrumb-item>
             </el-breadcrumb>
             <el-button type="primary" size="small" @click="handleSave" style="position: absolute; top: 0; right: 0;">保 存</el-button>

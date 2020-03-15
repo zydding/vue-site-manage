@@ -47,7 +47,6 @@
         </el-form>
     </div>
     <div class="footer">
-      <hr class="hr">
       <Footer></Footer>
     </div>
   </div>
@@ -135,7 +134,7 @@ export default {
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
   left: 0 !important;
-  background-color: #42BCFB !important;
+  background-color: #15B695 !important;
 }
 .div-login .el-input__icon{
   font-size: 20px;
@@ -158,7 +157,7 @@ export default {
 .el-form-item__content{
   .login-button{
     margin-top: 10px !important;
-    background-color: #42BCFB !important;
+    background-color: #15B695 !important;
     border: 0;
   }
 }
@@ -168,7 +167,6 @@ export default {
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: #017DDD;
   color: #fff;
   p {
     margin: 0;
@@ -177,14 +175,6 @@ export default {
     line-height: 20px;
     text-align: center;
     color: #6EA8DF;
-  }
-  hr{
-    margin: 0;
-    height: 0;
-    margin-top: 10px;
-    border-style: solid;
-    border-color: #74B7EC;
-    border-width: 1px 0 0;
   }
 }
 .login {
@@ -202,9 +192,18 @@ export default {
     position: relative;
     border-radius: 5px;
     width: 360px;
-    background-color: #fff;
+    background-color: #4D5C79;
     padding: 10px 20px;
     margin: 0;
+    h2 {
+      font-family: "Open Sans";
+      letter-spacing: 1px;
+      font-family: Roboto, sans-serif;
+      padding-bottom: 10px;
+      text-align: center;
+      font-size: 18px;
+      color: #fff;
+    }
   }
 }
 .login__shadow{
@@ -223,77 +222,5 @@ export default {
 }
 .forgot-password {
   margin-top: 10px;
-}
-</style>
-<style lang="scss" scoped>
-$inputbg: #283442;
-// $teal: rgb(0, 124, 137);
-$teal: #1890ff;
-
-.el-input input {
-  background: $inputbg;
-  // border: 0;
-  -webkit-appearance: none;
-  // border-radius: 0;
-  padding: 12px 5px 12px 15px;
-  color: #fff;
-  height: 47px;
-  caret-color: #fff;
-  border-color: #3e4956;
-}
-.el-button--primary {
-  background-color: $teal;
-  border-color: $teal;
-
-  &:hover,
-  &.active,
-  &:focus {
-    background: lighten($teal, 7);
-    border-color: lighten($teal, 7);
-  }
-}
-.login .el-input__inner:hover {
-  border-color: #3e4956;
-}
-.login .el-input__prefix {
-  background: $inputbg;
-  height: calc(100% - 2px);
-  left: 1px;
-  top: 1px;
-  border-radius: 3px;
-  .el-input__icon {
-    width: 30px;
-  }
-}
-.login .el-input input {
-  padding-left: 35px;
-}
-.login .el-card {
-  padding-top: 0;
-  padding-bottom: 30px;
-}
-h2 {
-  font-family: "Open Sans";
-  letter-spacing: 1px;
-  font-family: Roboto, sans-serif;
-  padding-bottom: 10px;
-  text-align: center;
-  font-size: 18px;
-  color: #454A4E;
-}
-a {
-  color: $teal;
-  text-decoration: none;
-  &:hover,
-  &:active,
-  &:focus {
-    color: lighten($teal, 7);
-  }
-}
-.login .el-card {
-  //   width: 340px;
-  width: 450px;
-  display: flex;
-  justify-content: center;
 }
 </style>

@@ -2,7 +2,7 @@
   <div class="body">
     <div class="header">
       <!-- <img width="160" src="./../assets/logo.png" alt=""> -->
-      <p class="title">登录</p>
+      <!-- <p class="title">登录</p> -->
     </div>
     <LoginCard @clickLogin="clickLogin($event,{})" />
   </div>
@@ -33,10 +33,6 @@ export default {
         .then(response => {
           // console.log(response);
           if (response.data) {
-            setToken(response.data.data.name, response.data.data);
-            setLoginToken(response.headers.token)
-            window.sessionStorage["tempFlag"] = true;
-            // console.log(localStorage.getItem('Admin-Msg'))
             sessionStorage.setItem("logined", true);
             this.$router.push('home');
           }else{
@@ -71,13 +67,11 @@ export default {
 .body {
   width: 100%;
   height: 100%;
-  background-color: #F1F2F7;
+  background-color: #3E4E67;
 }
 .header {
   padding: 20px 0;
   height: 188px;
-  // background: url("../../src/assets/top_1920.png") center center no-repeat;
-  background: #087FDB;
   color: #f0f4f8;
   display: flex;
   flex-flow: column nowrap;

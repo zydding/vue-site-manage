@@ -1,0 +1,15 @@
+.el-aside {
+  position: relative;
+}
+
+.el-table--border td:last-child {
+  border-right: 0;
+}
+
+.el-table--border, .el-table--group {
+  border: 0;
+}
+
+.el-table--border::after, .el-table--group::after {
+  width: 0;
+}

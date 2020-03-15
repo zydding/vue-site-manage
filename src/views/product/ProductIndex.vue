@@ -105,12 +105,11 @@ export default {
         },
         handleAdd() {
             // window.open("/productEdit?isAdd=true")
-            this.$router.push({path:'/productEdit', query:{isAdd: true}})
+            this.$router.push({path:'./productEdit', query:{isAdd: true}})
         },
         //编辑
         modifyRow(row) {
-            // window.open("/productEdit?isAdd=true")
-            this.$router.push({ path: '/productEdit', query:
+            this.$router.push({ path: './productEdit', query:
                 {
                     id: row.id,
                 }
@@ -139,7 +138,7 @@ export default {
 
         },
         viewRow(row) {
-            window.open("productView?id=" + row.id);
+            window.open(row.path);
         },
 
     }

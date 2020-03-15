@@ -105,12 +105,12 @@ export default {
         },
         handleAdd() {
             // window.open("/articleEdit?isAdd=true")
-            this.$router.push({path:'/articleEdit', query:{isAdd: true}})
+            this.$router.push({path:'./articleEdit', query:{isAdd: true}})
         },
         //编辑
         modifyRow(row) {
             // window.open("/articleEdit?isAdd=true")
-            this.$router.push({ path: '/articleEdit', query:
+            this.$router.push({ path: './articleEdit', query:
                 {
                     id: row.id,
                 }

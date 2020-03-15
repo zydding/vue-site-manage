@@ -1,19 +1,19 @@
 
-
-.el-menu--horizontal>.el-menu-item.is-active{
-    border-bottom: 0;
-    font-size: 16px;
-}
-.el-menu-item{
-    transition: none;
-    -webkit-transition: none;
+.el-aside{
+    position: relative;
 }
 
-.el-menu--horizontal .el-menu-item:not(.is-disabled):focus, .el-menu--horizontal .el-menu-item:not(.is-disabled):hover{
-    color: rgba(0,0,0,.5);
+//表格
+.el-table--border td:last-child{
+    border-right: 0;
 }
 
-.el-carousel__item img{
-    width: 100%;
+.el-table--border, .el-table--group{
+    border: 0;
 }
+.el-table--border::after, .el-table--group::after{
+    width: 0;
+}
+
+
 

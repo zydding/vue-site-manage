@@ -2,7 +2,7 @@
     <el-container style="padding: 20px; flex-direction: column;">
         <el-row style="margin: 0 0 30px;">
             <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/productIndex'}">新闻发布</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: './productIndex'}">新闻发布</el-breadcrumb-item>
                 <el-breadcrumb-item>通知公告</el-breadcrumb-item>
             </el-breadcrumb>
             <el-button type="primary" size="small" @click="handleSave" style="position: absolute; top: 0; right: 0;">保 存</el-button>
@@ -19,8 +19,8 @@
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item label="nginx路径" prop="nginxPath">
-                    <el-input v-model="form.nginxPath" autocomplete="off"></el-input>
+                <el-form-item label="nginx路径" prop="path">
+                    <el-input v-model="form.path" autocomplete="off"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
