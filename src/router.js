@@ -82,8 +82,16 @@ var routers =[
     component: () => import('./views/Home.vue'),
     children :[
       {
+        path: '/',
+        name: '主页',
+        meta: {
+          requireAuth: true
+        },
+        component: () => import('./views/article/ArticleIndex.vue')
+      },
+      {
         path: 'articleIndex',
-        name: '文章',
+        name: '文章管理',
         meta: {
           requireAuth: true
         },
@@ -107,7 +115,7 @@ var routers =[
       },
       {
         path: 'productIndex',
-        name: '作品',
+        name: '作品管理',
         meta: {
           requireAuth: true
         },
@@ -149,7 +157,7 @@ router_.beforeEach((to, from, next) => {
   if (to.matched.some(r => r.meta.requireAuth)) {
     var loginInfo = sessionStorage.getItem('logined')
     // console.log(loginInfo);
-    if (loginInfo=="true") {
+    if (loginInfo && loginInfo=="true") {
         next()
     } else {
       //重定向登录界面

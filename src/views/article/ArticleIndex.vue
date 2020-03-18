@@ -139,7 +139,12 @@ export default {
 
         },
         viewRow(row) {
-            window.open("articleView?id=" + row.id);
+            this.$router.push({ path: './articleView', query:
+                {
+                    id: row.id,
+                }
+            })
+            // window.open("../articleView?id=" + row.id);
         },
 
     }

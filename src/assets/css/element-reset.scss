@@ -15,5 +15,25 @@
     width: 0;
 }
 
+//菜单无限循环  缩进菜单时，二级菜单不显示文字问题
+.el-menu--popup .el-menu--collapse{
+    width: auto;
+    &>.el-menu-item span{
+        height: auto;
+        width: auto;
+        overflow: hidden;
+        visibility: visible;
+        display: inline-block;
+    }
+}
 
+//面包屑
+.el-breadcrumb {
+    font-size: 16px;
+}
+
+.el-breadcrumb__inner.is-link,
+.el-breadcrumb__separator.el-icon-arrow-right{
+    color: rgb(64, 158, 255)
+}
 

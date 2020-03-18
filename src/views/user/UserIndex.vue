@@ -185,6 +185,7 @@ export default {
         },
         handleAdd() {
             this.form={
+                isUse: 1,
                 sex: 1,
                 orderNo: this.total+1,
             }

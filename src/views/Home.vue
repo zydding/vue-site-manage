@@ -6,38 +6,14 @@
 		<el-main class="nopadding">
 			<el-container>
 				<!-- 左侧菜单 -->
-				<el-aside width="auto" style="border-right: 1px solid #ddd;">
-					<el-menu default-active="1-4-1" class="el-menu-vertical-demo" :collapse="isCollapse">
-						<el-submenu index="1">
-							<template slot="title">
-							<i class="el-icon-location"></i>
-							<span slot="title">导航一</span>
-							</template>
-							<el-menu-item-group>
-							<span slot="title">分组一</span>
-							<el-menu-item index="1-1">选项1</el-menu-item>
-							<el-menu-item index="1-2">选项2</el-menu-item>
-							</el-menu-item-group>
-							<el-menu-item-group title="分组2">
-							<el-menu-item index="1-3">选项3</el-menu-item>
-							</el-menu-item-group>
-							<el-submenu index="1-4">
-							<span slot="title">选项4</span>
-							<el-menu-item index="1-4-1">选项1</el-menu-item>
-							</el-submenu>
-						</el-submenu>
-						<el-menu-item index="2">
-							<i class="el-icon-menu"></i>
-							<span slot="title">导航二</span>
-						</el-menu-item>
-						<el-menu-item index="3" disabled>
-							<i class="el-icon-document"></i>
-							<span slot="title">导航三</span>
-						</el-menu-item>
-						<el-menu-item index="4">
-							<i class="el-icon-setting"></i>
-							<span slot="title">导航四</span>
-						</el-menu-item>
+				<el-aside :width="menuWidth" style="border-right: 1px solid #ddd;">
+					<el-menu class="el-menu-vertical-demo" 
+						:collapse="isCollapse" 
+						:default-active="activeMenu"
+						:default-openeds="openeds"
+						@select="handSelect"
+						router>
+						<NavMenu :className="className" :navMenus="menuData"></NavMenu>
 					</el-menu>
 					<div class="collspan" v-html="collspan" @click="collspanChange">{{collspan}}</div>
 				</el-aside>
@@ -48,14 +24,17 @@
 							<el-tag
 								:key="tag.name"
 								v-for="tag in tags"
-								closable
+								:closable="tag.isClose"
 								:disable-transitions="false"
 								@close="handleClose(tag)">
 								{{tag.name}}
 								</el-tag>
 						</el-header>
 						<el-main class="nopadding">
-							<router-view></router-view>
+							<keep-alive :include="tags">
+								<router-view></router-view>
+							</keep-alive>
+							<!-- <router-view></router-view> -->
 						</el-main>
 					</el-container>
 				</el-main>
@@ -66,21 +45,82 @@
 
 <script>
 import Header from "./../components/Header.vue";
+import NavMenu from "./../components/NavMenu.vue";
 export default {
 	components: {
-		Header
+		Header,NavMenu
 	},
     data(){
         return {
 			tags: [
-				{ name: '标签一', type: '' },
-				{ name: '标签二', type: 'success' },
-				{ name: '标签三', type: 'info' },
-				{ name: '标签四', type: 'warning' },
-				{ name: '标签五', type: 'danger' }
+				{ name: '主页', type: '',isClose: false },
+				{ name: '标签二', type: 'success',isClose: true },
+				{ name: '标签三', type: 'info',isClose: true },
+				{ name: '标签四', type: 'warning',isClose: true },
+				{ name: '标签五', type: 'danger',isClose: true }
 			],
 			isCollapse: true,
-			collspan: '<i class="el-icon-s-unfold" title="展开"></i>'
+			collspan: '<i class="el-icon-s-unfold" title="展开"></i>',
+			className: "el-menu--collapse",
+			activeMenu: '/home/',
+			openeds: ['/home/'],
+			menuWidth: '',
+			menuData: [
+				{
+					"id": "11", 
+					"name": "主页", 
+					"parentId": "-1", 
+					"orderNo": 1,
+					"target": "_self",
+					"url": "/home/",
+					"childNum": null,
+					"children": null,
+					icon: "el-icon-s-home",
+				},
+				{
+					"id": "269633163607670784", 
+					"name": "后台管理", 
+					"parentId": "-1", 
+					"orderNo": 1, 
+					"target": "_self", 
+					"url": "/home", 
+					"childNum": null, 
+					icon: "el-icon-setting",
+					"children": [
+						{
+							"id": "281924385252573184", 
+							"name": "文章管理", 
+							"parentId": "269633163607670784", 
+							"orderNo": 1, 
+							"target": "_self", 
+							"url": "/home/articleIndex", 
+							"childNum": null, 
+							"children": null, 
+						},
+						{
+							"id": "281924385252573184", 
+							"name": "作品管理", 
+							"parentId": "269633163607670784", 
+							"orderNo": 1, 
+							"target": "_self", 
+							"url": "/home/productIndex", 
+							"childNum": null, 
+							"children": null, 
+						},
+						{
+							"id": "281924385252573184", 
+							"name": "用户管理", 
+							"parentId": "269633163607670784", 
+							"orderNo": 1, 
+							"target": "_self", 
+							"url": "/home/userIndex", 
+							"childNum": null, 
+							"children": null, 
+						},
+						
+					], 
+				}, 
+			],
         };
     },
     name:'Home',
@@ -88,6 +128,8 @@ export default {
 		//collspanChange
 		collspanChange(){
 			this.isCollapse = this.isCollapse?false: true;
+			this.className = this.isCollapse?"el-menu--collapse":'';
+			this.menuWidth = this.isCollapse?"":'200px';
 			this.collspan = this.collspan == '<i class="el-icon-s-fold" title="收回"></i>'?
 				'<i class="el-icon-s-unfold" title="展开"></i>':'<i class="el-icon-s-fold" title="收回"></i>'
 		},
@@ -102,9 +144,57 @@ export default {
 			this.inputVisible = false;
 			this.inputValue = '';
 		},
-		
-        
-    }
+		handSelect(key, keyPath){
+			this.openeds = [];
+			var parents = this.menuData;
+			var data = this.findPath(key, parents);
+			this.activeMenu = data?data.url:"";
+		},
+		//找到选中的对象
+		findPath(key, parents) {
+			for (var index in parents) {
+				if (parents[index].url === key) {
+					this.openeds.push(parents[index].url);
+					return parents[index];
+					break;
+				}
+				if(parents[index].children && parents[index].children.length>0){
+					this.openeds.push(parents[index].url);
+					return this.findPath(key,parents[index].children)
+				}
+			}
+		},
+        setTags(route){
+            const isExist = this.tags.some(item => {
+                return item.path === route.fullPath;
+            })
+            if(!isExist){
+                this.tags.push({
+                    title: route.name,
+                    path: route.fullPath,
+					name: route.name,
+					isClose: true
+                })
+            }
+        },
+	},
+	watch:{
+        $route(newValue, oldValue){
+			console.log(newValue);
+            this.setTags(newValue);
+        }
+	},
+	created(){
+        // 只有在标签页列表里的页面才使用keep-alive，即关闭标签之后就不保存到内存中了。
+        bus.$on('tags', msg => {
+            let arr = [];
+            for(let i = 0, len = msg.length; i < len; i ++){
+                // 提取组件名存到tags中，通过include匹配
+                msg[i].name && arr.push(msg[i].name);
+            }
+            this.tags = arr;
+        })
+    },
 }
 </script>
 
@@ -152,8 +242,8 @@ export default {
 		justify-content: center;
 		font-size: 1.2rem;
 		position: absolute;
-		left: auto;
-		right: 0;
+		left: 50%;
+		margin-left: -20px;
 		top: auto;
 		bottom: 0;
 		cursor: pointer;

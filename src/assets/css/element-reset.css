@@ -13,3 +13,24 @@
 .el-table--border::after, .el-table--group::after {
   width: 0;
 }
+
+.el-menu--popup .el-menu--collapse {
+  width: auto;
+}
+
+.el-menu--popup .el-menu--collapse > .el-menu-item span {
+  height: auto;
+  width: auto;
+  overflow: hidden;
+  visibility: visible;
+  display: inline-block;
+}
+
+.el-breadcrumb {
+  font-size: 16px;
+}
+
+.el-breadcrumb__inner.is-link,
+.el-breadcrumb__separator.el-icon-arrow-right {
+  color: #409eff;
+}
