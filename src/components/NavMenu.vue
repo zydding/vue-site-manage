@@ -9,6 +9,7 @@
         :index="navMenu.url"
         style="font-align:left; height: 40px; line-height: 40px;"
       >
+        <i :class="navMenu.icon"></i>
         <span :title="navMenu.name">{{navMenu.name}}</span>
       </el-menu-item>
 

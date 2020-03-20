@@ -68,31 +68,37 @@ Vue.use(Router)
 // ]
 
 var routers =[
+  // {
+  //   path: '/',
+  //   redirect: '/home'
+  // },
   {
     path: '/login',
     name: '登录',
     component: () => import('./views/Login.vue')
   },
   {
-    path: '/home',
-    name: '主页',
+    path: '/',
+    // redirect: '/home',
     meta: {
       requireAuth: true
     },
     component: () => import('./views/Home.vue'),
     children :[
       {
-        path: '/',
-        name: '主页',
+        path: 'home',
+        name: '系统首页',
         meta: {
+          isRouter: true,
           requireAuth: true
         },
-        component: () => import('./views/article/ArticleIndex.vue')
+        component: () => import('./views/Dashboard.vue')
       },
       {
         path: 'articleIndex',
         name: '文章管理',
         meta: {
+          isRouter: true,
           requireAuth: true
         },
         component: () => import('./views/article/ArticleIndex.vue')
@@ -117,6 +123,7 @@ var routers =[
         path: 'productIndex',
         name: '作品管理',
         meta: {
+          isRouter: true,
           requireAuth: true
         },
         component: () => import('./views/product/ProductIndex.vue')
@@ -131,8 +138,9 @@ var routers =[
       },
       {
         path: 'userIndex',
-        name: '用户',
+        name: '用户管理',
         meta: {
+          isRouter: true,
           requireAuth: true
         },
         component: () => import('./views/user/UserIndex.vue')

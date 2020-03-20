@@ -26,6 +26,7 @@
 								v-for="tag in tags"
 								:closable="tag.isClose"
 								:disable-transitions="false"
+								:class="{'active': tag.isActive==true}"
 								@close="handleClose(tag)">
 								{{tag.name}}
 								</el-tag>
@@ -53,17 +54,17 @@ export default {
     data(){
         return {
 			tags: [
-				{ name: '主页', type: '',isClose: false },
-				{ name: '标签二', type: 'success',isClose: true },
-				{ name: '标签三', type: 'info',isClose: true },
-				{ name: '标签四', type: 'warning',isClose: true },
-				{ name: '标签五', type: 'danger',isClose: true }
+				// { name: '主页', isActive: true,isClose: false },
+				// { name: '标签二', isActive: false,isClose: true },
+				// { name: '标签三', isActive: false,isClose: true },
+				// { name: '标签四', isActive: false,isClose: true },
+				// { name: '标签五', isActive: false,isClose: true }
 			],
 			isCollapse: true,
 			collspan: '<i class="el-icon-s-unfold" title="展开"></i>',
 			className: "el-menu--collapse",
-			activeMenu: '/home/',
-			openeds: ['/home/'],
+			activeMenu: '/home',
+			openeds: ['/home'],
 			menuWidth: '',
 			menuData: [
 				{
@@ -72,10 +73,11 @@ export default {
 					"parentId": "-1", 
 					"orderNo": 1,
 					"target": "_self",
-					"url": "/home/",
+					"url": "/home",
 					"childNum": null,
 					"children": null,
 					icon: "el-icon-s-home",
+					isRouter: true,
 				},
 				{
 					"id": "269633163607670784", 
@@ -83,9 +85,10 @@ export default {
 					"parentId": "-1", 
 					"orderNo": 1, 
 					"target": "_self", 
-					"url": "/home", 
 					"childNum": null, 
+					"url": "11",
 					icon: "el-icon-setting",
+					isRouter: true,
 					"children": [
 						{
 							"id": "281924385252573184", 
@@ -93,9 +96,10 @@ export default {
 							"parentId": "269633163607670784", 
 							"orderNo": 1, 
 							"target": "_self", 
-							"url": "/home/articleIndex", 
+							"url": "/articleIndex", 
 							"childNum": null, 
 							"children": null, 
+							isRouter: true,
 						},
 						{
 							"id": "281924385252573184", 
@@ -103,9 +107,10 @@ export default {
 							"parentId": "269633163607670784", 
 							"orderNo": 1, 
 							"target": "_self", 
-							"url": "/home/productIndex", 
+							"url": "/productIndex", 
 							"childNum": null, 
 							"children": null, 
+							isRouter: true,
 						},
 						{
 							"id": "281924385252573184", 
@@ -113,9 +118,10 @@ export default {
 							"parentId": "269633163607670784", 
 							"orderNo": 1, 
 							"target": "_self", 
-							"url": "/home/userIndex", 
+							"url": "/userIndex", 
 							"childNum": null, 
 							"children": null, 
+							isRouter: true,
 						},
 						
 					], 
@@ -166,34 +172,48 @@ export default {
 		},
         setTags(route){
             const isExist = this.tags.some(item => {
-                return item.path === route.fullPath;
-            })
+				if(item.path === route.fullPath){
+					return true;
+				}
+			})
+			//不存在
             if(!isExist){
+				let isClose=true;
+				if(route.fullPath=="/home"){
+					isClose=false;
+				}
                 this.tags.push({
                     title: route.name,
                     path: route.fullPath,
 					name: route.name,
-					isClose: true
+					isClose: isClose,
+					isActive: true,
                 })
             }
         },
 	},
 	watch:{
-        $route(newValue, oldValue){
-			console.log(newValue);
-            this.setTags(newValue);
+        $route(newVal, oldVal){
+			console.log(newVal);
+			//不是路由，不加入
+			if(newVal.meta.isRouter){
+				this.setTags(newVal);
+			}
         }
 	},
 	created(){
+		let route= this.$route;
+		if(route.meta.isRouter)
+			this.setTags(route);
         // 只有在标签页列表里的页面才使用keep-alive，即关闭标签之后就不保存到内存中了。
-        bus.$on('tags', msg => {
-            let arr = [];
-            for(let i = 0, len = msg.length; i < len; i ++){
-                // 提取组件名存到tags中，通过include匹配
-                msg[i].name && arr.push(msg[i].name);
-            }
-            this.tags = arr;
-        })
+        // bus.$on('tags', msg => {
+        //     let arr = [];
+        //     for(let i = 0, len = msg.length; i < len; i ++){
+        //         // 提取组件名存到tags中，通过include匹配
+        //         msg[i].name && arr.push(msg[i].name);
+        //     }
+        //     this.tags = arr;
+        // })
     },
 }
 </script>
