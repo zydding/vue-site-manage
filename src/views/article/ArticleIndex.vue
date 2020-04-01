@@ -4,13 +4,21 @@
         </el-header>
         <el-main class="nopadding">
             <el-container style="height: 100%;">
-                <el-header class="nopadding">
+                <el-header class="nopadding search_head">
                     <el-button @click="handleAdd" icon="el-icon-plus" size="small" type="primary" plain style="margin:10px 0px 10px 0px;">添加</el-button>
-                    <!-- <el-input v-model="title" placeholder="请输入标题" size="small"></el-input> -->
-                    <!-- <el-button @click="handleSearch" type="primary" size="small" icon="el-icon-search" plain>查询</el-button> -->
-                    <el-input placeholder="请输入标题" v-model="title" class="input-with-select" size="small" style="width: 250px; float: right; margin-top: 9px" clearable>
-                        <el-button slot="append" icon="el-icon-search" @click="handleSearch"></el-button>
-                    </el-input>
+                    <el-form :model="formSearch" label-width="80px">
+                        <el-form-item label="活动名称">
+                            <el-input placeholder="请输入标题" v-model="title" class="input-with-select" size="small" style="width: 250px; float: right; margin-top: 9px" clearable>
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item label="活动名称">
+                            <el-input placeholder="请输入标题" v-model="title" class="input-with-select" size="small" style="width: 250px; float: right; margin-top: 9px" clearable>
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item label="活动名称">
+                        </el-form-item>
+                    </el-form>
+                    <el-button @click="handleSearch" icon="el-icon-search" size="small" type="primary" plain style="margin:10px 0px 10px 0px;">搜索</el-button>
                 </el-header>
                 <el-main class="nopadding">
                     <el-table :data="tableData" border stripe style="width: 100%;" size="small" height="100%" :header-cell-style="{background:'#ECF5FF',color:'#606266'}" fit v-loading="loading"
@@ -20,7 +28,8 @@
                                 <a class="activeLink" @click="modifyRow(scope.row)">{{scope.row.title}}</a>
                             </template>
                         </el-table-column>
-                        <!--                    <el-table-column prop="columnName" label="类型" align="center"></el-table-column>-->
+                        <el-table-column prop="typeName" label="类型" align="center">
+                        </el-table-column>
                         <el-table-column prop="author" label="作者" align="center"></el-table-column>
                         <el-table-column label="置顶" align="center">
                             <template slot-scope="scope">
@@ -59,6 +68,7 @@
 </template>
 
 <script>
+import getEnumList from './../../assets/js/common.js'
 
 export default {
     name: 'ArticleIndex',
@@ -66,21 +76,30 @@ export default {
         return {
             tableData: [],
             loading: false,
-            title: "",
+            formSearch: {},
             page: 1,
             rows: 15,
             total: 0,
+            typeList:[],
         }
     },
-    created() {
+    async created() {
+        this.typeList = await getEnumList("ArticleEnum");
         this.getTableData()
     },
     methods: {
         getTableData() {
             this.loading = true
             this.$axios.get(
-                "/api/article/list?title="+this.title+"&page="+ this.page + "&row="+ this.rows
+                "/api/article/list?title="+this.formSearch.title +"&page="+ this.formSearch.type +"&page="+ this.page + "&row="+ this.rows
             ).then(res => {
+                if(res.data.content){
+                    res.data.content.map((item)=>{
+                        if(item.type){
+                            item.typeName = this.getTypeName(item.type);
+                        }
+                    })
+                }
                 this.tableData = res.data.content;
                 this.total = res.data.totalElements;
                 this.loading = false
@@ -88,6 +107,16 @@ export default {
                 this.loading = false
                 this.$message.error(err)
             })
+        },
+        getTypeName(code){
+            let typeName = "";
+            this.typeList.some((item)=>{
+                if(item.key==code){
+                    typeName= item.value;
+                    return true;
+                }
+            })
+            return typeName;
         },
         handleSearch() {
             this.getTableData()
@@ -216,6 +245,33 @@ export default {
 }
 .nopadding {
     padding: 0 !important;
+}
+
+.search_head{
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
+    .el-form{
+        flex: 1;
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        justify-content: flex-end;
+        .el-form-item{
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 0px;
+            .el-form-item__content{
+                margin-left: 0 !important;
+                .el-input{
+                    margin-top: 0 !important;
+                }
+            }
+        }
+    }
 }
 </style>
 

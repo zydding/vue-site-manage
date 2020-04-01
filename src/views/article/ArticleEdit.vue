@@ -19,6 +19,18 @@
                 </el-form-item>
             </el-col>
             <el-col :span="12">
+                <el-form-item label="分类" prop="type">
+                    <el-select v-model="form.type" placeholder="请选择">
+                        <el-option
+                        v-for="item in typeList"
+                        :key="item.key"
+                        :label="item.value"
+                        :value="item.key">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+            </el-col>
+            <el-col :span="12">
                 <el-form-item label="是否推荐" prop="isRecommend">
                     <el-radio-group v-model="form.isRecommend">
                         <el-radio :label="0">否</el-radio>
@@ -34,7 +46,7 @@
                     </el-radio-group>
                 </el-form-item>
             </el-col>
-            <el-col :span="24">
+            <el-col :span="12">
                 <el-form-item label="摘要" prop="description">
                     <el-input type="textarea" v-model="form.description"></el-input>
                 </el-form-item>
@@ -56,6 +68,7 @@
     </el-container>
 </template>
 <script>
+import getEnumList from './../../assets/js/common.js'
 import Editor from './../../components/Editor'
 export default {
     name: 'ArticleEdit',
@@ -78,6 +91,7 @@ export default {
                 title: { required: true, message: '请输入标题', trigger: 'blur' },
                 description: { required: true, message: '请输入摘要', trigger: 'blur' },
                 content: { required: true, message: '请输入内容', trigger: 'blur' },
+                type: { required: true, message: '请选择类型', trigger: 'change' },
             },
             upAction: "/file/upload",
             fileData: {},
@@ -87,9 +101,11 @@ export default {
                 imageId: '',
                 imageUrl: ''
             },
+            typeList:[],
         }
     },
-    created() {
+    async created() {
+        this.typeList =await getEnumList("ArticleEnum");
         this.queryInfo = this.$route.query;
         // console.log("this.queryInfo",this.queryInfo);
         if(this.queryInfo && this.queryInfo.id) {
