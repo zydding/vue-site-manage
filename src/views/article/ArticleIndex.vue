@@ -7,18 +7,23 @@
                 <el-header class="nopadding search_head">
                     <el-button @click="handleAdd" icon="el-icon-plus" size="small" type="primary" plain style="margin:10px 0px 10px 0px;">添加</el-button>
                     <el-form :model="formSearch" label-width="80px">
-                        <el-form-item label="活动名称">
-                            <el-input placeholder="请输入标题" v-model="title" class="input-with-select" size="small" style="width: 250px; float: right; margin-top: 9px" clearable>
+                        <el-form-item label="名称">
+                            <el-input placeholder="请输入标题" v-model="formSearch.title" class="input-with-select" size="small" clearable>
                             </el-input>
                         </el-form-item>
-                        <el-form-item label="活动名称">
-                            <el-input placeholder="请输入标题" v-model="title" class="input-with-select" size="small" style="width: 250px; float: right; margin-top: 9px" clearable>
-                            </el-input>
-                        </el-form-item>
-                        <el-form-item label="活动名称">
+                        <el-form-item label="类型">
+                            <el-select v-model="formSearch.type" placeholder="请选择">
+                                <el-option value="" label="全部">全部</el-option>
+                                <el-option
+                                v-for="item in typeList"
+                                :key="item.key"
+                                :label="item.value"
+                                :value="item.key">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-form>
-                    <el-button @click="handleSearch" icon="el-icon-search" size="small" type="primary" plain style="margin:10px 0px 10px 0px;">搜索</el-button>
+                    <el-button @click="handleSearch" icon="el-icon-search" size="small" type="primary" plain style="margin:10px 0px 10px 10px;">搜索</el-button>
                 </el-header>
                 <el-main class="nopadding">
                     <el-table :data="tableData" border stripe style="width: 100%;" size="small" height="100%" :header-cell-style="{background:'#ECF5FF',color:'#606266'}" fit v-loading="loading"
@@ -76,7 +81,10 @@ export default {
         return {
             tableData: [],
             loading: false,
-            formSearch: {},
+            formSearch: {
+                title: '',
+                type: ''
+            },
             page: 1,
             rows: 15,
             total: 0,
@@ -91,7 +99,7 @@ export default {
         getTableData() {
             this.loading = true
             this.$axios.get(
-                "/api/article/list?title="+this.formSearch.title +"&page="+ this.formSearch.type +"&page="+ this.page + "&row="+ this.rows
+                "/api/article/list?title="+this.formSearch.title +"&type="+ this.formSearch.type +"&page="+ this.page + "&row="+ this.rows
             ).then(res => {
                 if(res.data.content){
                     res.data.content.map((item)=>{
@@ -240,36 +248,6 @@ export default {
         li {
             // margin: 0 10px 10px 0;
             flex: 0 0 50%;
-        }
-    }
-}
-.nopadding {
-    padding: 0 !important;
-}
-
-.search_head{
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-    justify-content: space-between;
-    .el-form{
-        flex: 1;
-        display: flex;
-        flex-flow: row nowrap;
-        align-items: center;
-        justify-content: flex-end;
-        .el-form-item{
-            display: flex;
-            flex-flow: row nowrap;
-            justify-content: flex-end;
-            align-items: center;
-            margin-bottom: 0px;
-            .el-form-item__content{
-                margin-left: 0 !important;
-                .el-input{
-                    margin-top: 0 !important;
-                }
-            }
         }
     }
 }

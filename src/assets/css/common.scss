@@ -17,3 +17,38 @@ a{
 .nopadding{
     padding: 0 0px;
 }
+
+.nopadding {
+    padding: 0 !important;
+}
+
+.search_head{
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
+    .el-form{
+        flex: 1;
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        justify-content: flex-end;
+        .el-form-item{
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 0px;
+            .el-form-item__content{
+                margin-left: 0 !important;
+                .el-input{
+                    margin-top: 0 !important;
+                }
+            }
+        }
+    }
+}
+
+.el-tag.active .el-tag__close{
+    color: #fff !important;
+}

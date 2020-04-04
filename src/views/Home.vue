@@ -27,15 +27,26 @@
 								:closable="tag.isClose"
 								:disable-transitions="false"
 								:class="{'active': tag.isActive==true}"
-								@close="handleClose(tag)">
+								@close="handleClose(tag)"
+								@click="tagClick(tag)"
+								>
 								{{tag.name}}
 								</el-tag>
+							<!-- <ul class="tags">
+								<li class="tags-li el-tag" :class="{'active': item.isActive==true}" v-for="(item,index) in tags" :key="index">
+									<router-link :to="item.path" class="tags-li-title">
+										{{item.name}}
+									</router-link>
+									<span v-if="item.isClose" class="tags-li-icon" @click="handleClose(item)"><i class="el-icon-close"></i></span>
+								</li>
+							</ul> -->
 						</el-header>
 						<el-main class="nopadding">
-							<keep-alive :include="tags">
-								<router-view></router-view>
-							</keep-alive>
-							<!-- <router-view></router-view> -->
+							<transition name="move" mode="out-in">
+								<keep-alive>
+									<router-view></router-view>
+								</keep-alive>
+							</transition>
 						</el-main>
 					</el-container>
 				</el-main>
@@ -131,7 +142,7 @@ export default {
     },
     name:'Home',
     methods:{
-		//collspanChange
+		//左边缩回或者打开菜单
 		collspanChange(){
 			this.isCollapse = this.isCollapse?false: true;
 			this.className = this.isCollapse?"el-menu--collapse":'';
@@ -139,22 +150,39 @@ export default {
 			this.collspan = this.collspan == '<i class="el-icon-s-fold" title="收回"></i>'?
 				'<i class="el-icon-s-unfold" title="展开"></i>':'<i class="el-icon-s-fold" title="收回"></i>'
 		},
+		//关闭tag
         handleClose(tag) {
+			// console.log("关闭",tag);
 			this.tags.splice(this.tags.indexOf(tag), 1);
+			if(tag.isActive){
+				let active = this.tags[this.tags.length-1];
+				this.$router.push(active);
+				//选择最后一个
+				this.handSelect(active.path);
+			}
 		},
 		handleAdd() {
 			let inputValue = this.inputValue;
 			if (inputValue) {
-			this.tags.push(inputValue);
+				this.tags.push(inputValue);
 			}
 			this.inputVisible = false;
 			this.inputValue = '';
 		},
+		//选择左边的菜单
 		handSelect(key, keyPath){
+			// console.log("选择"+key);
 			this.openeds = [];
 			var parents = this.menuData;
 			var data = this.findPath(key, parents);
 			this.activeMenu = data?data.url:"";
+		},
+		//选择tag
+		tagClick(route){
+			if(!route.isActive){
+				this.$router.push(route);
+				this.handSelect(route.path);
+			}
 		},
 		//找到选中的对象
 		findPath(key, parents) {
@@ -171,13 +199,27 @@ export default {
 			}
 		},
         setTags(route){
-            const isExist = this.tags.some(item => {
+			let isExist = true;
+            this.tags.map((item) => {
 				if(item.path === route.fullPath){
-					return true;
+					item.isActive=true;
+					isExist= false;
+				}else{
+					item.isActive=false;
 				}
 			})
+			//如果是空的，加入首页
+			if(this.tags.length==0 && route.fullPath!=="/home"){
+				this.tags.push({
+					title: "系统首页",
+                    path: "/home",
+					name: "系统首页",
+					isClose: false,
+					isActive: false,
+				})
+			}
 			//不存在
-            if(!isExist){
+            if(isExist){
 				let isClose=true;
 				if(route.fullPath=="/home"){
 					isClose=false;
@@ -194,27 +236,20 @@ export default {
 	},
 	watch:{
         $route(newVal, oldVal){
-			console.log(newVal);
+			// console.log("路由变化",newVal);
 			//不是路由，不加入
 			if(newVal.meta.isRouter){
 				this.setTags(newVal);
 			}
         }
 	},
-	created(){
+	mounted(){
 		let route= this.$route;
-		if(route.meta.isRouter)
+		if(route.meta.isRouter){
+			this.handSelect(route.fullPath);
 			this.setTags(route);
-        // 只有在标签页列表里的页面才使用keep-alive，即关闭标签之后就不保存到内存中了。
-        // bus.$on('tags', msg => {
-        //     let arr = [];
-        //     for(let i = 0, len = msg.length; i < len; i ++){
-        //         // 提取组件名存到tags中，通过include匹配
-        //         msg[i].name && arr.push(msg[i].name);
-        //     }
-        //     this.tags = arr;
-        // })
-    },
+		}
+	},
 }
 </script>
 
@@ -233,9 +268,23 @@ export default {
 		}
 	}
 	/**tag */
+	.el-tag{
+		cursor: pointer;
+		a{
+			color: inherit;
+		}
+	}
+
+	.el-tag.active{
+		background-color: #4DA7FD;
+		color: #fff;
+	}
+	
 	.el-tag + .el-tag {
 		margin-left: 10px;
 	}
+
+	
 	.button-new-tag {
 		margin-left: 10px;
 		height: 32px;
