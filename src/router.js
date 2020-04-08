@@ -95,6 +95,15 @@ var routers =[
         component: () => import('./views/Dashboard.vue')
       },
       {
+        path: 'pageViewLog',
+        name: '访问日志',
+        meta: {
+          isRouter: true,
+          requireAuth: true
+        },
+        component: () => import('./views/pageView/PageViewLog.vue')
+      },
+      {
         path: 'articleIndex',
         name: '文章管理',
         meta: {

@@ -134,6 +134,17 @@ export default {
 							"children": null, 
 							isRouter: true,
 						},
+						{
+							"id": "281924385252573184", 
+							"name": "访问记录", 
+							"parentId": "269633163607670784", 
+							"orderNo": 1, 
+							"target": "_self", 
+							"url": "/pageViewLog", 
+							"childNum": null, 
+							"children": null, 
+							isRouter: true,
+						},
 						
 					], 
 				}, 
