@@ -33,6 +33,7 @@ export default {
         .then(response => {
           // console.log(response);
           if (response.data) {
+            sessionStorage.setItem("token", response.headers.token);
             sessionStorage.setItem("logined", true);
             this.$router.push('home');
           }else{

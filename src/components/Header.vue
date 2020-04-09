@@ -138,12 +138,16 @@ export default {
                 this.$axios
                 .post("/api/login/logout")
                 .then(response => {
-                    sessionStorage.setItem("logined", false);
-                    this.$router.replace("/login");
+                  sessionStorage.clear();
+                  sessionStorage.setItem("logined", false);
+                  this.$router.replace("/login");
                 })
                 .catch(error => {
-                    this.$message.error("异常，请联系管理员！");
-                    console.log("error:" + error.toString());
+                  sessionStorage.clear();
+                  sessionStorage.setItem("logined", false);
+                  this.$router.replace("/login");
+                  // this.$message.error("异常，请联系管理员！");
+                  // console.log("error:" + error.toString());
                 });
             } else {
                 //updatePwd
