@@ -138,7 +138,7 @@ export default {
             //         "file.metaData.fileName": "",
             //     }
             // }).catch(err => {
-            //     // this.$message.error(err)
+            //     // console.log(err);
             // })
         },
         handleEdit() {
@@ -151,7 +151,7 @@ export default {
             ).then(res => {
                 this.form = res.data;
             }).catch(err => {
-                // this.$message.error(err)
+                // console.log(err);
             })
         },
         //获取id
@@ -169,7 +169,7 @@ export default {
                     this.fileList.push(file);
                 })
             }).catch(err => {
-                // this.$message.error(err)
+                // console.log(err);
             })
         },
 
@@ -207,7 +207,7 @@ export default {
                 })
                 this.$message({ type: 'success', message: '删除成功!' });
             }).catch(err => {
-                this.$message.error(err)
+                console.log(err);
             })
         },
         handleSave() {
@@ -227,7 +227,7 @@ export default {
                             this.$message.error(res.data)
                         }
                     }).catch(err => {
-                        this.$message.error(err)
+                        console.log(err);
                     })
                 } else {
                     console.log('error submit!!');

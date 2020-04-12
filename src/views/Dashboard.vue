@@ -41,7 +41,7 @@ export default {
                 this.loading = false
             }).catch(err => {
                 this.loading = false
-                this.$message.error(err)
+                console.log(err);
             })
 		},
 		loadEchart(){

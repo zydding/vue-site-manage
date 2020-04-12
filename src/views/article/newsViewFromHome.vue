@@ -139,7 +139,7 @@ export default {
                     }
                 }
             }).catch(err => {
-                this.$message.error(err)
+                console.log(err);
             })
         },
         getTableData(id) {
@@ -148,7 +148,7 @@ export default {
             ).then(res => {
                 this.form=res.data.data;
             }).catch(err => {
-                this.$message.error(err)
+                console.log(err);
             })
         },
         //获取id
@@ -159,7 +159,7 @@ export default {
             ).then(res => {
                 this.fileList = res.data;
             }).catch(err => {
-                // this.$message.error(err)
+                // console.log(err);
             })
         },
         //转换上传时间

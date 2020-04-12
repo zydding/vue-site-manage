@@ -113,7 +113,7 @@ export default {
                 this.loading = false
             }).catch(err => {
                 this.loading = false
-                this.$message.error(err)
+                console.log(err);
             })
         },
         getTypeName(code){
@@ -169,7 +169,7 @@ export default {
                         this.$message.error("删除失败！");
                     }
                 }).catch(err => {
-                    this.$message.error(err)
+                    console.log(err);
                 })
 
             }).catch(() => { });
