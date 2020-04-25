@@ -42,7 +42,7 @@ Axios.interceptors.response.use(
   error => {
     if(error.response.status=="401"){
       // console.log("没有登录！");
-      Vue.prototype.$message.error("没有登录！3秒后自动跳转到登录界面！");
+      Vue.prototype.$message.error("登录过期！3秒后自动跳转到登录界面！");
       setTimeout(function(){
         router.replace("/login");
       },3000)

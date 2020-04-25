@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+        window.dep = class Dep{
+            constructor(){
+                this.subscriber = new Set();
+            }
+
+            depend(){
+                if(activeUpdate){
+                    //注册这个函数到订阅者
+                    this.subscriber.add(activeUpdate);
+                    console.log("注册函数",JSON.stringify(this.subscriber));
+                }
+            }
+            notify(){
+                //运行这个函数
+                this.subscriber.forEach(sub=>sub())
+            }
+        };
+
+        let activeUpdate;
+        function autorun(update){
+            function wrappedUpdate(){
+                activeUpdate = wrappedUpdate;
+                update();
+                activeUpdate = null;
+            }
+
+            wrappedUpdate();
+        }
+
+        activeUpdate = function wrappedUpdate(){
+            // activeUpdate = wrappedUpdate;
+            console.log(11);
+            // activeUpdate = null;
+        }
+    </script>
+</body>
+</html>
