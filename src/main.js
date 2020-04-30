@@ -36,7 +36,8 @@ Axios.interceptors.request.use(
 Axios.interceptors.response.use(
   //成功
   res => {
-    // console.log(res);
+    //把userInfo放在Vuex中
+    console.log(res.headers.userinfo);
     return res;
   },
   error => {
