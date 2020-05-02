@@ -89,6 +89,11 @@ export default {
             userName: "zeke",
         };
     },
+    mounted(){
+      // console.log(this.$store.state.user.prop);
+      this.userName= (sessionStorage.getItem("login_name") || "游客");
+      // this.userName= (this.$store.state.user.prop.name || "游客");
+    },
     name:'Header',
     methods:{
         //修改密码点确定
@@ -134,21 +139,21 @@ export default {
         },
         handleCommand(command) {
             if (command === "logout") {
-                //退出登录
-                this.$axios
-                .post("/api/login/logout")
-                .then(response => {
-                  sessionStorage.clear();
-                  sessionStorage.setItem("logined", false);
-                  this.$router.replace("/login");
-                })
-                .catch(error => {
-                  sessionStorage.clear();
-                  sessionStorage.setItem("logined", false);
-                  this.$router.replace("/login");
-                  // this.$message.error("异常，请联系管理员！");
-                  // console.log("error:" + error.toString());
-                });
+              //退出登录
+              this.$axios
+              .post("/api/login/logout")
+              .then(response => {
+                sessionStorage.clear();
+                sessionStorage.setItem("logined", false);
+                this.$router.replace("/login");
+              })
+              .catch(error => {
+                sessionStorage.clear();
+                sessionStorage.setItem("logined", false);
+                this.$router.replace("/login");
+                // this.$message.error("异常，请联系管理员！");
+                // console.log("error:" + error.toString());
+              });
             } else {
                 //updatePwd
                 this.dialogFormVisible = true;

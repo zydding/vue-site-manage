@@ -13,6 +13,7 @@
                 this.subscriber = new Set();
             }
 
+            //当我们调用get，我们挂载depend
             depend(){
                 if(activeUpdate){
                     //注册这个函数到订阅者
@@ -20,6 +21,7 @@
                     console.log("注册函数",JSON.stringify(this.subscriber));
                 }
             }
+            //当调用set，运行
             notify(){
                 //运行这个函数
                 this.subscriber.forEach(sub=>sub())

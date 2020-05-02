@@ -13,7 +13,10 @@
 						:default-openeds="openeds"
 						@select="handSelect"
 						router>
-						<NavMenu :className="className" :navMenus="menuData"></NavMenu>
+						<!-- 游客 -->
+						<NavMenu v-if="this.$store.state.user.prop==0" :className="className" :navMenus="menuData1"></NavMenu>
+						<!-- 管理员 -->
+						<NavMenu v-else :className="className" :navMenus="menuData"></NavMenu>
 					</el-menu>
 					<div class="collspan" v-html="collspan" @click="collspanChange">{{collspan}}</div>
 				</el-aside>
@@ -135,17 +138,77 @@ export default {
 							isRouter: true,
 						},
 						{
+							"id": "281924385252573184",
+							"name": "访问记录",
+							"parentId": "269633163607670784",
+							"orderNo": 1,
+							"target": "_self",
+							"url": "/pageViewLog",
+							"childNum": null,
+							"children": null,
+							isRouter: true,
+						},
+						
+					], 
+				}, 
+			],
+			menuData1: [
+				{
+					"id": "11", 
+					"name": "主页", 
+					"parentId": "-1", 
+					"orderNo": 1,
+					"target": "_self",
+					"url": "/home",
+					"childNum": null,
+					"children": null,
+					icon: "el-icon-s-home",
+					isRouter: true,
+				},
+				{
+					"id": "269633163607670784", 
+					"name": "后台管理", 
+					"parentId": "-1", 
+					"orderNo": 1, 
+					"target": "_self", 
+					"childNum": null, 
+					"url": "11",
+					icon: "el-icon-setting",
+					isRouter: true,
+					"children": [
+						{
 							"id": "281924385252573184", 
-							"name": "访问记录", 
+							"name": "文章管理", 
 							"parentId": "269633163607670784", 
 							"orderNo": 1, 
 							"target": "_self", 
-							"url": "/pageViewLog", 
+							"url": "/articleIndex", 
 							"childNum": null, 
 							"children": null, 
 							isRouter: true,
 						},
-						
+						{
+							"id": "281924385252573184", 
+							"name": "作品管理", 
+							"parentId": "269633163607670784", 
+							"orderNo": 1, 
+							"target": "_self", 
+							"url": "/productIndex", 
+							"childNum": null, 
+							"children": null, 
+							isRouter: true,
+						},
+						{
+							"id": "281924385252573184", 
+							"name": "用户管理", 
+							"parentId": "269633163607670784", 
+							"orderNo": 1, 
+							"target": "_self", 
+							"url": "/userIndex", 
+							"childNum": null, 
+							"children": null, 
+							isRouter: true,
+						},
 					], 
 				}, 
 			],
@@ -252,7 +315,7 @@ export default {
 			if(newVal.meta.isRouter){
 				this.setTags(newVal);
 			}
-        }
+		},
 	},
 	mounted(){
 		let route= this.$route;

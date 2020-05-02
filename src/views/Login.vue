@@ -32,9 +32,11 @@ export default {
         .post("/api/login/check?code="+ userInfo.code+"&pwd="+ userInfo.pwd)
         .then(response => {
           // console.log(response);
-          if (response.data) {
-            sessionStorage.setItem("token", response.headers.token);
+          if (response.status==200) {
+            // sessionStorage.setItem("token", response.headers.token);
+            // this.$store.commit("user/setProp",response.data);
             sessionStorage.setItem("logined", true);
+            sessionStorage.setItem("login_name", response.data.name);
             this.$router.push('home');
           }else{
             if(response.status==244){
