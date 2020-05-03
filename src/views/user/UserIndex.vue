@@ -5,7 +5,7 @@
         <el-main class="nopadding">
             <el-container style="height: 100%;">
                 <el-header class="nopadding">
-                    <el-button @click="handleAdd" icon="el-icon-plus" size="small" type="primary" plain style="margin:10px 0px 10px 0px;">添加</el-button>
+                    <el-button v-if="this.$store.state.user.prop=='1'" @click="handleAdd" icon="el-icon-plus" size="small" type="primary" plain style="margin:10px 0px 10px 0px;">添加</el-button>
                     <el-input placeholder="请输入姓名" v-model="name" class="input-with-select" size="small" style="width: 250px; float: right; margin-top: 9px" clearable>
                         <el-button slot="append" icon="el-icon-search" @click="handleSearch"></el-button>
                     </el-input>

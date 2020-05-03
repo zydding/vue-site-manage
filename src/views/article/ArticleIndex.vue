@@ -5,7 +5,7 @@
         <el-main class="nopadding">
             <el-container style="height: 100%;">
                 <el-header class="nopadding search_head">
-                    <el-button @click="handleAdd" icon="el-icon-plus" size="small" type="primary" plain style="margin:10px 0px 10px 0px;">添加</el-button>
+                    <el-button v-if="this.$store.state.user.prop=='1'" @click="handleAdd" icon="el-icon-plus" size="small" type="primary" plain style="margin:10px 0px 10px 0px;">添加</el-button>
                     <el-form :model="formSearch" label-width="80px">
                         <el-form-item label="名称">
                             <el-input placeholder="请输入标题" v-model="formSearch.title" class="input-with-select" size="small" clearable>
