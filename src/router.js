@@ -79,7 +79,7 @@ var routers =[
   },
   {
     path: '/',
-    // redirect: '/home',
+    redirect: '/home',
     meta: {
       requireAuth: true
     },
