@@ -5,7 +5,7 @@
         <el-main class="nopadding">
             <el-container style="height: 100%;">
                 <el-header class="nopadding search_head">
-                    <el-button @click="handleAdd" icon="el-icon-plus" size="small" type="primary" plain style="margin:10px 0px 10px 0px;">添加</el-button>
+                    <el-button v-if="this.$store.state.user.prop=='1'" @click="handleAdd" icon="el-icon-plus" size="small" type="primary" plain style="margin:10px 0px 10px 0px;">添加</el-button>
                     <el-form :model="formSearch" label-width="80px">
                         <el-form-item label="名称">
                             <el-input placeholder="请输入标题" v-model="formSearch.title" class="input-with-select" size="small" clearable>
@@ -29,9 +29,9 @@
                     <el-table :data="tableData" border stripe style="width: 100%;" size="small" height="100%" :header-cell-style="{background:'#ECF5FF',color:'#606266'}" fit v-loading="loading"
                         highlight-current-row>
                         <el-table-column prop="title" label="标题" width="300" header-align="center" fixed>
-                            <template slot-scope="scope">
+                            <!-- <template slot-scope="scope">
                                 <a class="activeLink" @click="modifyRow(scope.row)">{{scope.row.title}}</a>
-                            </template>
+                            </template> -->
                         </el-table-column>
                         <el-table-column prop="typeName" label="类型" align="center">
                         </el-table-column>
@@ -47,7 +47,7 @@
                             </template>
                         </el-table-column>
                         <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
-                        <el-table-column label="操作" align="center" width="150">
+                        <el-table-column v-if="this.$store.state.user.prop=='1'" label="操作" align="center" width="150">
                             <template slot-scope="scope">
                                 <el-tooltip content="预览" placement="top">
                                     <el-button size="mini" type="primary" icon="el-icon-view" @click="viewRow(scope.row)" circle plain></el-button>

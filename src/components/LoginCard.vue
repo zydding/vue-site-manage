@@ -11,12 +11,12 @@
         >
           <h2>登录</h2>
           <el-form-item prop="code">
-            <el-input v-model="model.code" placeholder="请输入用户名" prefix-icon="el-icon-user-solid"></el-input>
+            <el-input v-model="model.code" placeholder="用户名:visitor" prefix-icon="el-icon-user-solid"></el-input>
           </el-form-item>
           <el-form-item prop="password">
             <el-input
               v-model="model.password"
-              placeholder="请输入密码"
+              placeholder="密码:12345"
               type="password"
               prefix-icon="el-icon-s-goods"
             ></el-input>
@@ -66,8 +66,8 @@ export default {
         password: "lightscope"
       },
       model: {
-        code: "",
-        password: ""
+        code: "visitor",
+        password: "12345"
       },
       loading: false,
       //输入限制规则

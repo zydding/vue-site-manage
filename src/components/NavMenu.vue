@@ -3,7 +3,7 @@
     <template v-for="(navMenu) in navMenus">
       <!-- 最后一级菜单 -->
       <el-menu-item
-        v-if="!navMenu.children"
+        v-if="!navMenu.children && !navMenu.isShow"
         :key="navMenu.url"
         :data="navMenu"
         :index="navMenu.url"

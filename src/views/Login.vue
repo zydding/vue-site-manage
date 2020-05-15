@@ -32,10 +32,13 @@ export default {
         .post("/api/login/check?code="+ userInfo.code+"&pwd="+ userInfo.pwd)
         .then(response => {
           // console.log(response);
-          if (response.data) {
-            sessionStorage.setItem("token", response.headers.token);
+          if (response.status==200) {
+            // sessionStorage.setItem("token", response.headers.token);
+            // this.$store.commit("user/setProp",response.data);
             sessionStorage.setItem("logined", true);
-            this.$router.push('home');
+            sessionStorage.setItem("login_name", response.data.name);
+            // this.$router.replace('home');
+            window.location.replace('./home');
           }else{
             if(response.status==244){
                 //用户密码错误

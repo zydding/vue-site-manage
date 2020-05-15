@@ -89,32 +89,41 @@ export default {
             userName: "zeke",
         };
     },
+    mounted(){
+      // console.log(this.$store.state.user.prop);
+      this.userName= (sessionStorage.getItem("login_name") || "游客");
+      // this.userName= (this.$store.state.user.prop.name || "游客");
+    },
     name:'Header',
     methods:{
         //修改密码点确定
         submitForm(formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
-                this.pwdform.pwd;
-                this.pwdform.pwdNew;
-                let param = {
-                    oldPassword: this.pwdform.pwd,
-                    newPassword: this.pwdform.pwdNew
-                };
+                // let param = {
+                //     oldPassword: this.pwdform.pwd,
+                //     newPassword: this.pwdform.pwdNew
+                // };
+                var params = new FormData();
+                params.append("oldPassword",this.pwdform.pwd);
+                params.append("newPassword",this.pwdform.pwdNew);
+                
                 //退出登录
                 this.$axios
-                    .post("/api/login/updatePassword", this.$qs.stringify(param))
+                    .post("/api/user/updatePassword", params)
                     .then(response => {
-                    if (response.data.succeed) {
+                    if (response.data) {
                         this.$message({
-                        message: "更新密码成功！",
-                        type: "success"
+                          message: "更新密码成功！",
+                          type: "success"
                         });
                         this.dialogFormVisible = false;
+                        // this.pwdform = {};
                         this.$refs[formName].resetFields();
+                        this.handleCommand("logout");
                     } else {
                         this.$message.error(
-                        response.data.msg ? response.data.msg : "失败"
+                        response.data.msg ? response.data.msg : "修改失败！当前密码输入错误！"
                         );
                     }
                     })
@@ -134,24 +143,30 @@ export default {
         },
         handleCommand(command) {
             if (command === "logout") {
-                //退出登录
-                this.$axios
-                .post("/api/login/logout")
-                .then(response => {
-                  sessionStorage.clear();
-                  sessionStorage.setItem("logined", false);
-                  this.$router.replace("/login");
-                })
-                .catch(error => {
-                  sessionStorage.clear();
-                  sessionStorage.setItem("logined", false);
-                  this.$router.replace("/login");
-                  // this.$message.error("异常，请联系管理员！");
-                  // console.log("error:" + error.toString());
-                });
+              //退出登录
+              this.$axios
+              .post("/api/login/logout")
+              .then(response => {
+                sessionStorage.clear();
+                sessionStorage.setItem("logined", false);
+                // this.$router.replace("/login");
+                window.location.replace('./login');
+              })
+              .catch(error => {
+                sessionStorage.clear();
+                sessionStorage.setItem("logined", false);
+                // this.$router.replace("/login");
+                window.location.replace('./login');
+                // this.$message.error("异常，请联系管理员！");
+                // console.log("error:" + error.toString());
+              });
             } else {
                 //updatePwd
-                this.dialogFormVisible = true;
+                if(this.$store.state.user.prop=='1'){
+                  this.dialogFormVisible = true;
+                }else{
+                  this.$message.error("游客不能修改密码！");
+                }
             }
         },
     }
