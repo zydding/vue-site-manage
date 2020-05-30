@@ -31,6 +31,8 @@
                         </el-table-column>
                         <el-table-column prop="originUrl" label="来源" align="center">
                         </el-table-column>
+                        <el-table-column prop="userAgent" label="设备信息" align="center">
+                        </el-table-column>
                     </el-table>
                 </el-main>
                 <el-footer>
@@ -73,9 +75,37 @@ export default {
             this.$axios.get(
                 "/api/pageView/list?startTime="+startTime +"&endTime="+ endTime +"&page="+ this.page + "&row="+ this.rows
             ).then(res => {
-                
-                this.tableData = res.data.content;
-                this.total = res.data.totalElements;
+                if(res.data.content){
+                    res.data.content.map((val)=>{
+                        let device = "PC";
+                        let browser = ""
+                        //判断移动设备
+                        let ua= val.userAgent ? val.userAgent.toLowerCase() : null;
+                        if(ua && (ua.indexOf("linux")!=-1 || ua.indexOf("android")!=-1 || ua.indexOf("adr")!=-1 || ua.indexOf("okhttp")!=-1)){
+                            device="Android";
+                        }
+                        if(ua && (ua.indexOf("darwin")!=-1 || ua.indexOf("iphone")!=-1
+                         || ua.indexOf("ipad")!=-1 || ua.indexOf("ipod")!=-1 || ua.indexOf("macintosh")!=-1 || ua.indexOf("cfnetwork")!=-1)){
+                            device="IOS";
+                        }
+                        //判断pc浏览器
+                        if(ua && ua.indexOf("chrome")!=-1){
+                            browser = "chrome";
+                            device = "PC";
+                        }else if(ua && ua.indexOf("msie")!=-1){
+                            browser = "IE";
+                            device = "PC";
+                        }else if(ua && ua.indexOf("firefox")!=-1){
+                            browser = "firefox";
+                            device = "PC";
+                        }else{
+                            browser = "其他";
+                        }
+                        val.userAgent = device + "&"+ browser;
+                    })
+                    this.tableData = res.data.content;
+                    this.total = res.data.totalElements;
+                }
                 this.loading = false
             }).catch(err => {
                 this.loading = false
