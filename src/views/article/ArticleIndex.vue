@@ -184,7 +184,20 @@ export default {
             // window.open("../articleView?id=" + row.id);
         },
 
-    }
+    },
+    activated(){
+        let that = this
+        Self.$on('detailShow',(data)=>{ // 接收
+            if(data.isAdd){ // 是新增还是编辑--这个是在跳转的时候带过去的--新增/编辑页面也会根据这个显示内容有所区别
+               that.tableData.push(data)
+               that.tableData = Array.from(new Set(that.addParams.SubsidyInfos)) // 为避免重复去个重
+            }else{
+　　　　　　　　　//　that.addParams[that.editIndex] = data // 刚开始想通过直接修改，后来发现不行，因为页面是有缓存的，显示的还是未修改之前的
+                Vue.set(that.tableData,that.editIndex,data) // 用set方法修改数据
+            }
+        })
+
+    },
 }
 </script>
 

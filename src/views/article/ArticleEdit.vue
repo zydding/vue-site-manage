@@ -107,7 +107,7 @@ export default {
     async mounted() {
         this.typeList =await getEnumList("ArticleEnum");
         this.queryInfo = this.$route.query;
-        console.log("this.queryInfo",this.queryInfo);
+        // console.log("this.queryInfo",this.queryInfo);
         if(this.queryInfo && this.queryInfo.id) {
             this.handleEdit()
         }else {
@@ -222,6 +222,7 @@ export default {
                         params
                     ).then(res => {
                         if (res.data) {
+                            Self.$emit('detailShow',this.form) // 事件分发
                             this.$message({ type: 'success', message: '保存成功' })
                         } else {
                             this.$message.error(res.data)
