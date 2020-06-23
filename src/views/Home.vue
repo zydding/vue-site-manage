@@ -47,9 +47,10 @@
 						<el-main class="nopadding">
 							<transition name="move" mode="out-in">
 								<keep-alive>
-									<router-view></router-view>
+									<router-view v-if="$route.meta.isRouter"></router-view>
 								</keep-alive>
 							</transition>
+							<router-view v-if="!$route.meta.isRouter"></router-view>
 						</el-main>
 					</el-container>
 				</el-main>

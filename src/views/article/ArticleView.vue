@@ -155,9 +155,9 @@ export default {
         getFileList(formId){
             this.fileList =[];
             this.$axios.get(
-                "/fs/files/search?metaData.formId="+formId
+                "/api/file/getFileList?bizPk="+formId+"&page=1&row=100"
             ).then(res => {
-                this.fileList = res.data;
+                this.fileList = res.content;
             }).catch(err => {
                 // console.log(err);
             })
@@ -200,7 +200,7 @@ export default {
         },
         //删除数据
         delForm(data) {
-            this.axios.delete(`/fs/files/delete/${data.id}`).then(res => {
+            this.axios.delete(`/api/file/delete/${data.id}`).then(res => {
                 if (res.data.succeed) {
                     this.getFileList(this.bizPk);
                     this.$message({
@@ -220,11 +220,11 @@ export default {
         },
         //下载文件
         downloadFile(data) {
-            window.open(`/fs/files/download/${data.id}?asAttachment=true`)
+            window.open(`/api/file/download/${data.id}?asAttachment=true`)
         },
         //在线预览
         previewFile(data) {
-            window.open(`/fs/files/view?metaData.formId=${data.metaData.formId}&id=${data.id}`)
+            window.open(`/api/file/view?bizPk=${data.bizPk}&id=${data.id}`)
         }
     }
 }

@@ -104,10 +104,10 @@ export default {
             typeList:[],
         }
     },
-    async created() {
+    async mounted() {
         this.typeList =await getEnumList("ArticleEnum");
         this.queryInfo = this.$route.query;
-        // console.log("this.queryInfo",this.queryInfo);
+        console.log("this.queryInfo",this.queryInfo);
         if(this.queryInfo && this.queryInfo.id) {
             this.handleEdit()
         }else {
@@ -134,7 +134,7 @@ export default {
             //         content: '',
             //     }
             //     this.fileData = {
-            //         "file.metaData.formId": id,
+            //         "file.bizPk": id,
             //         "file.metaData.fileName": "",
             //     }
             // }).catch(err => {
@@ -144,7 +144,7 @@ export default {
         handleEdit() {
             let row = this.queryInfo
             this.fileData = {
-                "file.metaData.formId": row.id,
+                "file.bizPk": row.id,
             }
             this.$axios.get(
                 "/api/article/" + row.id
@@ -158,13 +158,13 @@ export default {
         getFileList(formId) {
             this.fileList = [];
             this.$axios.get(
-                "/fs/files/search?metaData.formId=" + formId
+                "/api/file/getFileList?bizPk=" + formId+"&page=1&row=100"
             ).then(res => {
-                res.data.forEach((item) => {
+                res.content.forEach((item) => {
                     let file = {
                         name: item.filename,
                         id: item.id,
-                        url: "/fs/files/view?metaData.formId=" + formId + "&id=" + item.id,
+                        url: "/api/file/view?bizPk=" + formId + "&id=" + item.id,
                     }
                     this.fileList.push(file);
                 })
@@ -196,7 +196,7 @@ export default {
         handleRemove(file, fileList) {
             this.$axios({
                 method: 'delete',
-                url: "/fs/files/delete/" + file.id,
+                url: "/api/file/delete/" + file.id,
                 dataType: 'text'
             }).then(res => {
                 // console.log(res);
