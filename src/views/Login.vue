@@ -31,10 +31,10 @@ export default {
       this.$axios
         .post("/api/login/check?code="+ userInfo.code+"&pwd="+ userInfo.pwd)
         .then(response => {
-          // console.log(response);
+          console.log(response);
           if (response.status==200) {
             // sessionStorage.setItem("token", response.headers.token);
-            // this.$store.commit("user/setProp",response.data);
+            this.$store.commit("user/setProp",response.data.role);
             sessionStorage.setItem("logined", true);
             sessionStorage.setItem("login_name", response.data.name);
             // this.$router.replace('home');

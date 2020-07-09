@@ -211,18 +211,18 @@ export default {
             })
         },
         handleSave() {
-            var params = new FormData();
-            for(let i in this.form){
-                params.append(i,this.form[i]);
-            }
+            // var params = new FormData();
+            // for(let i in this.form){
+            //     params.append(i,this.form[i]);
+            // }
             this.$refs["ruleForm"].validate((valid) => {
                 if (valid) {
                     this.$axios.post(
                         "/api/article/save",
-                        params
+                        this.form
                     ).then(res => {
                         if (res.data) {
-                            Self.$emit('detailShow',this.form) // 事件分发
+                            this.$emit('detailShow',this.form) // 事件分发
                             this.$message({ type: 'success', message: '保存成功' })
                         } else {
                             this.$message.error(res.data)
