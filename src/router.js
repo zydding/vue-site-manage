@@ -146,6 +146,23 @@ var routers =[
         component: () => import('./views/product/ProductEdit.vue')
       },
       {
+        path: 'enumIndex',
+        name: '枚举管理',
+        meta: {
+          isRouter: true,
+          requireAuth: true
+        },
+        component: () => import('./views/enum/EnumIndex.vue')
+      },
+      {
+        path: 'enumEdit',
+        name: '枚举编辑',
+        meta: {
+          requireAuth: true
+        },
+        component: () => import('./views/enum/EnumEdit.vue')
+      },
+      {
         path: 'userIndex',
         name: '用户管理',
         meta: {

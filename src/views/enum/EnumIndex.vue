@@ -1,7 +1,8 @@
 <template>
     <el-container class="news-container" ref="newsPublic">
-        <el-header class="nopadding">
-        </el-header>
+        <el-aside style="padding-right: 15px; border-right: 1px solid #ddd;">
+            <el-tree ref="tree1" lazy node-key="id" :load="getTreeChildNode" @node-expand="nodeExpand" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+        </el-aside>
         <el-main class="nopadding">
             <el-container style="height: 100%;">
                 <el-header class="nopadding">
@@ -15,29 +16,16 @@
                 <el-main class="nopadding">
                     <el-table :data="tableData" border stripe style="width: 100%;" size="small" height="100%" :header-cell-style="{background:'#ECF5FF',color:'#606266'}" fit v-loading="loading"
                         highlight-current-row>
-                        <el-table-column prop="title" label="标题" width="300" header-align="center" fixed>
+                        <el-table-column prop="name" label="name" width="300" header-align="center" fixed>
                             <!-- <template slot-scope="scope">
                                 <a class="activeLink" @click="modifyRow(scope.row)">{{scope.row.title}}</a>
                             </template> -->
                         </el-table-column>
-                        <!--                    <el-table-column prop="columnName" label="类型" align="center"></el-table-column>-->
-                        <el-table-column prop="author" label="作者" align="center"></el-table-column>
-                        <el-table-column label="置顶" align="center">
-                            <template slot-scope="scope">
-                                {{scope.row.isRecommend==0 ? '否' : '是'}}
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="对外" align="center">
-                            <template slot-scope="scope">
-                                {{scope.row.isOuter==0 ? '否' : '是'}}
-                            </template>
-                        </el-table-column>
+                        <el-table-column prop="value" label="值" align="center"></el-table-column>
+                        <el-table-column prop="remake" label="备注" align="center"></el-table-column>
                         <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
                         <el-table-column v-if="this.$store.state.user.prop=='1'" label="操作" align="center" width="150">
                             <template slot-scope="scope">
-                                <el-tooltip content="预览" placement="top">
-                                    <el-button size="mini" type="primary" icon="el-icon-view" @click="viewRow(scope.row)" circle plain></el-button>
-                                </el-tooltip>
                                 <el-tooltip content="编辑" placement="top">
                                     <el-button size="mini" type="primary" icon="el-icon-edit" @click="modifyRow(scope.row)" circle plain></el-button>
                                 </el-tooltip>
@@ -61,25 +49,65 @@
 <script>
 
 export default {
-    name: 'ProductIndex',
+    name: 'EnumIndex',
     data() {
         return {
+            treeData:[],
             tableData: [],
             loading: false,
             title: "",
             page: 1,
             rows: 15,
             total: 0,
+            defaultProps:{
+                children: 'children',
+                label: 'name',
+                isLeaf: 'leaf',
+            },
         }
     },
     created() {
-        this.getTableData()
+        // this.getTreeData(0);
+        // this.getTableData();
     },
     methods: {
+        nodeExpand(data,node,tag){
+            // if(data.id){
+            //     this.getTreeData(data.id);
+            // }
+            // console.log(data,node,tag);
+        },
+        handleNodeClick(){
+            this.getTableData();
+        },
+       
+        getTreeChildNode(node, resolve){
+            // console.log("getTreeChildNode",node);
+            if (node.level === 0) {
+                //初始parendId
+                return resolve([{ name: '枚举',id:-1 }]);
+            }
+            if (node.level > 1) return resolve([]);
+            if(node.data){
+                // console.log("请求",node);
+                this.$axios.get(
+                    "/api/enum/treeList?parentId="+node.data.id
+                ).then(res => {
+                    res.data.map((val,index)=>{
+                        val.leaf=val.count==0?true:false;
+                    });
+                    // console.log("jiguo",res.data);
+                    resolve(res.data);
+                }).catch(err => {
+                    console.log(err);
+                })
+            }
+        },
         getTableData() {
-            this.loading = true
+            this.loading = true;
+            let node = this.$refs.tree1.getCurrentNode();
             this.$axios.get(
-                "/api/product/list?title="+this.title+"&page="+ this.page + "&row="+ this.rows
+                "/api/enum/list?name="+this.title+"&page="+ this.page + "&row="+ this.rows+"&parentId="+node.id
             ).then(res => {
                 this.tableData = res.data.content;
                 this.total = res.data.totalElements;
@@ -104,12 +132,17 @@ export default {
             this.getTableData()
         },
         handleAdd() {
-            // window.open("/productEdit?isAdd=true")
-            this.$router.push({path:'./productEdit', query:{isAdd: true}})
+            // window.open("/enumEdit?isAdd=true")
+            let node = this.$refs.tree1.getCurrentNode();
+            if(node && node.id){
+                this.$router.push({path:'./enumEdit', query:{isAdd: true,parentId:node.id}})
+            }else{
+                this.$message.error("请选择节点后添加！");
+            }
         },
         //编辑
         modifyRow(row) {
-            this.$router.push({ path: './productEdit', query:
+            this.$router.push({ path: './enumEdit', query:
                 {
                     id: row.id,
                 }
@@ -122,11 +155,24 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.$axios.delete(
-                    "/api/product/"+row.id
+                    "/api/enum/"+row.id
                 ).then(res => {
                     if (res.data) {
                         this.$message({ type: 'success', message: '删除成功!' });
-                        this.getTableData()
+                        this.getTableData();
+                        let node = this.$refs.tree1.getCurrentNode();
+                        if(node && !node.leaf){
+                            this.$axios.get(
+                                "/api/enum/treeList?parentId="+node.id
+                            ).then(res => {
+                                res.data.map((val,index)=>{
+                                    val.leaf=val.count==0?true:false;
+                                });
+                                this.$refs.tree1.updateKeyChildren(""+node.id,res.data);
+                            }).catch(err => {
+                                console.log(err);
+                            })
+                        }
                     } else {
                         this.$message.error("删除失败！");
                     }
@@ -137,16 +183,28 @@ export default {
             }).catch(() => { });
 
         },
-        viewRow(row) {
-            window.open(row.path);
-        },
-
     },
     watch:{
         $route(newVal, oldVal){
             //从详情页跳转到列表页，刷新数据
             // console.log("route",newVal,oldVal);
-            if(oldVal.path==="/productEdit"){
+            if(oldVal.path==="/enumEdit"){
+                let node = this.$refs.tree1.getCurrentNode();
+                // console.log("node",node);
+                //有子节点才刷新
+                if(node && !node.leaf){
+                    this.$axios.get(
+                        "/api/enum/treeList?parentId="+node.id
+                    ).then(res => {
+                        res.data.map((val,index)=>{
+                            val.leaf=val.count==0?true:false;
+                        });
+                        // console.log("node11",node);
+                        this.$refs.tree1.updateKeyChildren(""+node.id,res.data);
+                    }).catch(err => {
+                        console.log(err);
+                    })
+                }
                 this.getTableData();
             }
 		},

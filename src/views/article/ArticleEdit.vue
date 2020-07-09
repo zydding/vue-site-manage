@@ -222,7 +222,7 @@ export default {
                         this.form
                     ).then(res => {
                         if (res.data) {
-                            this.$emit('detailShow',this.form) // 事件分发
+                            // this.$emit('detailShow',this.form) // 事件分发
                             this.$message({ type: 'success', message: '保存成功' })
                         } else {
                             this.$message.error(res.data)

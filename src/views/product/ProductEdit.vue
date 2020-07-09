@@ -176,15 +176,15 @@ export default {
             })
         },
         handleSave() {
-            var params = new FormData();
-            for(let i in this.form){
-                params.append(i,this.form[i]);
-            }
+            // var params = new FormData();
+            // for(let i in this.form){
+            //     params.append(i,this.form[i]);
+            // }
             this.$refs["ruleForm"].validate((valid) => {
                 if (valid) {
                     this.$axios.post(
                         "/api/product/save",
-                        params
+                        this.form
                     ).then(res => {
                         if (res.data) {
                             this.$message({ type: 'success', message: '保存成功' })

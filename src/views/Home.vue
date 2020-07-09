@@ -129,6 +129,17 @@ export default {
 						},
 						{
 							"id": "281924385252573184", 
+							"name": "枚举管理", 
+							"parentId": "269633163607670784", 
+							"orderNo": 1, 
+							"target": "_self", 
+							"url": "/enumIndex", 
+							"childNum": null, 
+							"children": null, 
+							isRouter: true,
+						},
+						{
+							"id": "281924385252573184", 
 							"name": "用户管理", 
 							"parentId": "269633163607670784", 
 							"orderNo": 1, 
