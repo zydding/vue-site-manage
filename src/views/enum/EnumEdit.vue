@@ -35,8 +35,8 @@ export default {
                 id: ""
             },
             rules: {
-                name: { required: true, message: '请输入作者', trigger: 'blur' },
-                value: { required: true, message: '请输入标题', trigger: 'blur' },
+                name: { required: true, message: '请输入name', trigger: 'blur' },
+                value: { required: true, message: '请输入value', trigger: 'blur' },
                 description: { required: true, message: '请输入摘要', trigger: 'blur' },
             },
             queryInfo: {},
@@ -78,10 +78,10 @@ export default {
                         "/api/enum/save",
                         this.form
                     ).then(res => {
-                        if (res.data) {
+                        if (res.data.status) {
                             this.$message({ type: 'success', message: '保存成功' })
                         } else {
-                            this.$message.error(res.data)
+                            this.$message.error("保存失败！"+res.data.msg);
                         }
                     }).catch(err => {
                         console.log(err);
