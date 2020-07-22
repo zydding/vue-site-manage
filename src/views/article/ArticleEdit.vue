@@ -23,9 +23,9 @@
                     <el-select v-model="form.type" placeholder="请选择">
                         <el-option
                         v-for="item in typeList"
-                        :key="item.key"
-                        :label="item.value"
-                        :value="item.key">
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -109,9 +109,9 @@ export default {
         this.queryInfo = this.$route.query;
         // console.log("this.queryInfo",this.queryInfo);
         if(this.queryInfo && this.queryInfo.id) {
-            this.handleEdit()
+            this.handleEdit();
         }else {
-            this.handleAdd()
+            this.handleAdd();
         }
     },
     methods: {
@@ -210,13 +210,22 @@ export default {
                 console.log(err);
             })
         },
+        getTypeName(val){
+            let obj = {};
+            obj = this.typeList.find((item)=>{//遍历list的数据
+                return item.id === val;//筛选出匹配数据
+            });
+            console.log(obj.name);//获取list里面的name
+        },
         handleSave() {
-            // var params = new FormData();
-            // for(let i in this.form){
-            //     params.append(i,this.form[i]);
-            // }
             this.$refs["ruleForm"].validate((valid) => {
                 if (valid) {
+                    let obj = {};
+                    obj = this.typeList.find((item)=>{//遍历list的数据
+                        return item.id === this.form.type;//筛选出匹配数据
+                    });
+                    //获取name属性
+                    this.form.typeName=(obj.name||"");
                     this.$axios.post(
                         "/api/article/save",
                         this.form

@@ -1,12 +1,12 @@
 import axios from 'axios'
 
-function getEnumList(code) {
+function getEnumList(value) {
     return new Promise((resolve, reject) => {
         axios
-        .get("/api/enumClassify/list?typeName="+code)
+        .get("/api/enum/findListByValue?value="+value)
         .then(response => {
-            if(response.data && response.data.length>0){
-                resolve(response.data);
+            if(response.data.data && response.data.data.length>0){
+                resolve(response.data.data);
             }else{
                 resolve([]);
             }

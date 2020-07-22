@@ -8,14 +8,19 @@
             <el-button type="primary" size="small" @click="handleSave" style="position: absolute; top: 0; right: 0;">保 存</el-button>
         </el-row>
         <el-form :model="form" label-width="100px" class="demo-ruleForm" :rules="rules" ref="ruleForm">
-            <el-col :span="24">
+            <el-col :span="12">
                 <el-form-item label="name" prop="name">
                     <el-input v-model="form.name" autocomplete="off"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
                 <el-form-item label="值" prop="value">
-                    <el-input v-model="form.value" autocomplete="off"></el-input>
+                    <el-input v-model="form.value" autocomplete="off" placeholder="唯一值"></el-input>
+                </el-form-item>
+            </el-col>
+            <el-col :span="12">
+                <el-form-item label="排序号" prop="orderNum">
+                    <el-input v-model="form.orderNum" autocomplete="off" placeholder="排序号"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -36,8 +41,7 @@ export default {
             },
             rules: {
                 name: { required: true, message: '请输入name', trigger: 'blur' },
-                value: { required: true, message: '请输入value', trigger: 'blur' },
-                description: { required: true, message: '请输入摘要', trigger: 'blur' },
+                // value: { required: true, message: '请输入value', trigger: 'blur' },
             },
             queryInfo: {},
         }
@@ -46,15 +50,16 @@ export default {
         this.queryInfo = this.$route.query;
         // console.log("this.queryInfo",this.queryInfo);
         if(this.queryInfo && this.queryInfo.id) {
-            this.handleEdit()
+            this.handleEdit();
         }else {
-            this.handleAdd()
+            this.handleAdd();
         }
     },
     methods: {
         handleAdd() {
             this.form = {
-                parentId:this.queryInfo.parentId
+                parentId:this.queryInfo.parentId,
+                orderNum: this.queryInfo.count?Number(this.queryInfo.count)+1:1,
             }
         },
         handleEdit() {

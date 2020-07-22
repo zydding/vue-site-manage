@@ -16,9 +16,9 @@
                                 <el-option value="" label="全部">全部</el-option>
                                 <el-option
                                 v-for="item in typeList"
-                                :key="item.key"
-                                :label="item.value"
-                                :value="item.key">
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -93,7 +93,7 @@ export default {
     },
     async created() {
         this.typeList = await getEnumList("ArticleEnum");
-        this.getTableData()
+        this.getTableData();
     },
     methods: {
         getTableData() {
@@ -102,11 +102,11 @@ export default {
                 "/api/article/list?title="+this.formSearch.title +"&type="+ this.formSearch.type +"&page="+ this.page + "&row="+ this.rows
             ).then(res => {
                 if(res.data.content){
-                    res.data.content.map((item)=>{
-                        if(item.type){
-                            item.typeName = this.getTypeName(item.type);
-                        }
-                    })
+                    // res.data.content.map((item)=>{
+                    //     if(item.type){
+                    //         item.typeName = this.getTypeName(item.type);
+                    //     }
+                    // })
                 }
                 this.tableData = res.data.content;
                 this.total = res.data.totalElements;
@@ -116,16 +116,16 @@ export default {
                 console.log(err);
             })
         },
-        getTypeName(code){
-            let typeName = "";
-            this.typeList.some((item)=>{
-                if(item.key==code){
-                    typeName= item.value;
-                    return true;
-                }
-            })
-            return typeName;
-        },
+        // getTypeName(code){
+        //     let typeName = "";
+        //     this.typeList.some((item)=>{
+        //         if(item.key==code){
+        //             typeName= item.value;
+        //             return true;
+        //         }
+        //     })
+        //     return typeName;
+        // },
         handleSearch() {
             this.getTableData()
         },

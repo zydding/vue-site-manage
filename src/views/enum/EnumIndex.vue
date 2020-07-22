@@ -60,7 +60,7 @@ export default {
             rows: 15,
             total: 0,
             defaultProps:{
-                children: 'children',
+                // children: 'children',
                 label: 'name',
                 isLeaf: 'leaf',
             },
@@ -87,7 +87,7 @@ export default {
                 //初始parendId
                 return resolve([{ name: '枚举',id:-1 }]);
             }
-            if (node.level > 1) return resolve([]);
+            // if (node.level > 1) return resolve([]);
             if(node.data){
                 // console.log("请求",node);
                 this.$axios.get(
@@ -135,7 +135,7 @@ export default {
             // window.open("/enumEdit?isAdd=true")
             let node = this.$refs.tree1.getCurrentNode();
             if(node && node.id){
-                this.$router.push({path:'./enumEdit', query:{isAdd: true,parentId:node.id}})
+                this.$router.push({path:'./enumEdit', query:{isAdd: true,parentId:node.id,count:node.count}})
             }else{
                 this.$message.error("请选择节点后添加！");
             }
