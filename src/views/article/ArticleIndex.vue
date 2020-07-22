@@ -28,7 +28,7 @@
                 <el-main class="nopadding">
                     <el-table :data="tableData" border stripe style="width: 100%;" size="small" height="100%" :header-cell-style="{background:'#ECF5FF',color:'#606266'}" fit v-loading="loading"
                         highlight-current-row>
-                        <el-table-column prop="title" label="标题" width="300" header-align="center" fixed>
+                        <el-table-column prop="title" label="标题" width="300" header-align="center">
                             <!-- <template slot-scope="scope">
                                 <a class="activeLink" @click="modifyRow(scope.row)">{{scope.row.title}}</a>
                             </template> -->

@@ -134,6 +134,7 @@ export default {
         handleAdd() {
             // window.open("/enumEdit?isAdd=true")
             let node = this.$refs.tree1.getCurrentNode();
+            console.log(node);
             if(node && node.id){
                 this.$router.push({path:'./enumEdit', query:{isAdd: true,parentId:node.id,count:node.count}})
             }else{
