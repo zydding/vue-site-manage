@@ -106,6 +106,17 @@ export default {
 					isRouter: true,
 					"children": [
 						{
+							"id": "281924385252573185", 
+							"name": "基金管理", 
+							"parentId": "269633163607670784", 
+							"orderNo": 1, 
+							"target": "_self", 
+							"url": "/fundIndex", 
+							"childNum": null, 
+							"children": null, 
+							isRouter: true,
+						},
+						{
 							"id": "281924385252573184", 
 							"name": "文章管理", 
 							"parentId": "269633163607670784", 

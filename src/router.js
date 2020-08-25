@@ -170,7 +170,24 @@ var routers =[
           requireAuth: true
         },
         component: () => import('./views/user/UserIndex.vue')
-      }
+      },
+      {
+        path: 'fundIndex',
+        name: '基金管理',
+        meta: {
+          isRouter: true,
+          requireAuth: true
+        },
+        component: () => import('./views/fund/FundIndex.vue')
+      },
+      {
+        path: 'fundEdit',
+        name: '基金编辑',
+        meta: {
+          requireAuth: true
+        },
+        component: () => import('./views/fund/FundEdit.vue')
+      },
     ]
   },
   {
