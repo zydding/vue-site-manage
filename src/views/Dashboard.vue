@@ -34,9 +34,31 @@ export default {
             this.$axios.get(
                 "/api/pageView/findByDay?day="+this.formSearch.day
             ).then(res => {
-				if(res.data && res.data.length>0){
-					this.tableData = res.data;
+				let dataTemp=[];
+				for(let i=this.formSearch.day-1;i>=0;i--){
+					var day1 = new Date();
+					day1.setTime(day1.getTime()-i*24*60*60*1000);
+					var s1 = day1.getFullYear()+"-0" + (day1.getMonth()+1) + "-" + day1.getDate();
+					let dataItem={
+						ipcount: 0,
+						pageview: 0,
+						time: s1,
+					};
+					if(res.data && res.data.length>0){
+						res.data.forEach((val)=>{
+							if(val.time==s1){
+								dataItem={
+									ipcount: val.ipcount,
+									pageview: val.pageview,
+									time: s1,
+								}
+								return true;
+							}
+						})
+						dataTemp.push(dataItem);
+					}
 				}
+				this.tableData = dataTemp;
 				this.loadEchart();
                 this.loading = false
             }).catch(err => {
@@ -50,7 +72,7 @@ export default {
 			let dataArr =[];
 			let ipArr =[];
 			data.forEach((item)=>{
-				timeArr.push(item.date);
+				timeArr.push(item.time);
 				dataArr.push(item.pageview);
 				ipArr.push(item.ipcount)
 			})
