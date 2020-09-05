@@ -55,8 +55,8 @@ export default {
 								return true;
 							}
 						})
-						dataTemp.push(dataItem);
 					}
+					dataTemp.push(dataItem);
 				}
 				this.tableData = dataTemp;
 				this.loadEchart();

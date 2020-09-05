@@ -69,8 +69,8 @@ export default {
             this.loading = true;
             let startTime="",endTime="";
             if(this.formSearch.time && this.formSearch.time.length){
-                startTime = this.formSearch.time[0] || "";
-                endTime = this.formSearch.time[1] || "";
+                startTime = this.formSearch.time[0]?this.formSearch.time[0]+" 00:00:00" : "";
+                endTime = this.formSearch.time[1]?this.formSearch.time[1]+" 23:59:59" : "";
             }
             this.$axios.get(
                 "/api/pageView/list?startTime="+startTime +"&endTime="+ endTime +"&page="+ this.page + "&row="+ this.rows

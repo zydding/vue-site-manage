@@ -102,6 +102,7 @@ export default {
                 imageUrl: ''
             },
             typeList:[],
+            validArray: ['author','title','description','type'],
         }
     },
     async mounted() {
@@ -218,32 +219,42 @@ export default {
             console.log(obj.name);//获取list里面的name
         },
         handleSave() {
-            this.$refs["ruleForm"].validate((valid) => {
-                if (valid) {
-                    let obj = {};
-                    obj = this.typeList.find((item)=>{//遍历list的数据
-                        return item.id === this.form.type;//筛选出匹配数据
-                    });
-                    //获取name属性
-                    this.form.typeName=(obj.name||"");
-                    this.$axios.post(
-                        "/api/article/save",
-                        this.form
-                    ).then(res => {
-                        if (res.data) {
-                            // this.$emit('detailShow',this.form) // 事件分发
-                            this.$message({ type: 'success', message: '保存成功' })
-                        } else {
-                            this.$message.error(res.data)
-                        }
-                    }).catch(err => {
-                        console.log(err);
-                    })
+            if(!this.form.content){
+                this.$refs["ruleForm"].validate((valid) => {});
+                return;
+            }
+            let validFlag=true;
+            //部分验证
+            this.$refs["ruleForm"].validateField(this.validArray,(error) => {
+                if (!error) {
+                    
                 } else {
-                    console.log('error submit!!');
-                    return false;
+                    validFlag=false;
                 }
+            })
+            if(!validFlag){
+                console.log("验证失败！");
+                return;
+            }
+            let obj = {};
+            obj = this.typeList.find((item)=>{//遍历list的数据
+                return item.id === this.form.type;//筛选出匹配数据
             });
+            //获取name属性
+            this.form.typeName=(obj.name||"");
+            this.$axios.post(
+                "/api/article/save",
+                this.form
+            ).then(res => {
+                if (res.data) {
+                    // this.$emit('detailShow',this.form) // 事件分发
+                    this.$message({ type: 'success', message: '保存成功' })
+                } else {
+                    this.$message.error(res.data)
+                }
+            }).catch(err => {
+                console.log(err);
+            })
         },
         changContent(val) {
             this.form.content = val

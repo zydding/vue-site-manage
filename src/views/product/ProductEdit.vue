@@ -102,6 +102,7 @@ export default {
                     isOuter: 0,
                     id: id,
                     author: "zeke",
+                    newFlag:1,
                 }
                 this.fileData = {
                     "bizPk": id,
