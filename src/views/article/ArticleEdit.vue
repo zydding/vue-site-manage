@@ -93,9 +93,6 @@ export default {
                 content: { required: true, message: '请输入内容', trigger: 'blur' },
                 type: { required: true, message: '请选择类型', trigger: 'change' },
             },
-            upAction: "/file/upload",
-            fileData: {},
-            fileList: [],
             queryInfo: {},
             currentRow: {
                 imageId: '',
@@ -126,7 +123,7 @@ export default {
             // this.$axios.get(
             //     "/base/getNewId"
             // ).then(res => {
-            //     let id = res.data.digitalId;
+            //     let id = res.data;
             //     this.form = {
             //         isImage: 0,
             //         isRecommend: 0,
@@ -153,62 +150,6 @@ export default {
                 this.form = res.data;
             }).catch(err => {
                 // console.log(err);
-            })
-        },
-        //获取id
-        getFileList(formId) {
-            this.fileList = [];
-            this.$axios.get(
-                "/api/file/getFileList?bizPk=" + formId+"&page=1&row=100"
-            ).then(res => {
-                res.content.forEach((item) => {
-                    let file = {
-                        name: item.filename,
-                        id: item.id,
-                        url: "/api/file/view?bizPk=" + formId + "&id=" + item.id,
-                    }
-                    this.fileList.push(file);
-                })
-            }).catch(err => {
-                // console.log(err);
-            })
-        },
-
-        //上传前校验
-        beforeAvatarUpload(file) {
-            this.fileList.push(file);
-            this.form.fileName = file.name;
-            return true;
-        },
-        //Excel上传成功,重新刷新数据
-        handleAvatarSuccess(res, file) {
-            file.id = res[0].id;
-            let obj = {};
-            if (res.length > 0) {
-                res.forEach((item) => {
-                    obj.id = item.id;
-                    obj.fileName = item.filename;
-                    this.form.imageId = item.id;
-                })
-            }
-            this.$message.success("上传成功");
-        },
-        //删除选择文件
-        handleRemove(file, fileList) {
-            this.$axios({
-                method: 'delete',
-                url: "/api/file/delete/" + file.id,
-                dataType: 'text'
-            }).then(res => {
-                // console.log(res);
-                this.fileList.forEach((item, index) => {
-                    if (item.id === file.id) {
-                        this.fileList.splice(index, 1);
-                    }
-                })
-                this.$message({ type: 'success', message: '删除成功!' });
-            }).catch(err => {
-                console.log(err);
             })
         },
         getTypeName(val){

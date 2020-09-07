@@ -46,18 +46,19 @@
             </el-col>
             <el-col :span="24">
                 <el-form-item label="预览图片">
-                    <el-upload class="upload-demo" :headers="headers" :data="fileData" :action="upAction" :before-upload="beforeAvatarUpload" :file-list="fileList" :on-remove="handleRemove" :multiple="false"
-                        list-type="picture" :on-success="handleAvatarSuccess">
-                        <el-button style="margin:10px 0px 10px 10px;" size="small" icon="el-icon-plus" type="primary">选择附件</el-button>
-                    </el-upload>
+                    <FileUpload ref="fileUpload1" :fileData="{bizPk: this.form.id}" :multiple="false"></FileUpload>
                 </el-form-item>
             </el-col>
         </el-form>
     </el-container>
 </template>
 <script>
+import FileUpload from './../../components/FileUpload'
 export default {
     name: 'ProductEdit',
+    components: {
+        FileUpload
+    },
     data() {
         return {
             form: {
@@ -73,11 +74,7 @@ export default {
                 title: { required: true, message: '请输入标题', trigger: 'blur' },
                 description: { required: true, message: '请输入摘要', trigger: 'blur' },
             },
-            upAction: "/api/file/upload",
-            fileData: {},
-            fileList: [],
             queryInfo: {},
-            headers: {"Zeke_Up": 1}
         }
     },
     created() {
@@ -124,56 +121,6 @@ export default {
                 this.getFileList(res.data.fileId)
             }).catch(err => {
                 // console.log(err);
-            })
-        },
-        //获取id
-        getFileList(formId) {
-            this.$axios.get(
-                "/api/file/getFileList?page=1&row=100&id=" + formId
-            ).then(res => {
-                if(res.data.totalPages>0){
-                    res.data.content.map((item)=>{
-                        let file = {
-                            name: item.originalName,
-                            id: item.id,
-                            url: "/api/file/view?id=" + formId,
-                        }
-                        this.fileList.push(file);
-                    })
-                }
-            }).catch(err => {
-                // console.log(err);
-            })
-            
-        },
-
-        //上传前校验
-        beforeAvatarUpload(file) {
-            this.fileList.push(file);
-            this.form.fileName = file.name;
-            return true;
-        },
-        //Excel上传成功,重新刷新数据
-        handleAvatarSuccess(res, file) {
-            file.id = res[0].id;
-            this.form.fileId = file.id;
-            this.$message.success("上传成功");
-        },
-        //删除选择文件
-        handleRemove(file, fileList) {
-            this.$axios({
-                method: 'delete',
-                url: "/api/file/deleteFileList?id=" + file.id,
-            }).then(res => {
-                // console.log(res);
-                this.fileList.forEach((item, index) => {
-                    if (item.id === file.id) {
-                        this.fileList.splice(index, 1);
-                    }
-                })
-                this.$message({ type: 'success', message: '删除成功!' });
-            }).catch(err => {
-                console.log(err);
             })
         },
         handleSave() {
