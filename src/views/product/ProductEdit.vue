@@ -136,6 +136,7 @@ export default {
                     ).then(res => {
                         if (res.data) {
                             this.$message({ type: 'success', message: '保存成功' })
+                            this.form.newFlag=0;
                         } else {
                             this.$message.error(res.data)
                         }

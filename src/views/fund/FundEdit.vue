@@ -75,7 +75,7 @@ export default {
     },
     async mounted() {
         this.industryList =await getEnumList("fund_industry");
-        // this.statusList =await getEnumList("fund_industry");
+        this.statusList =await getEnumList("fund_status");
         this.queryInfo = this.$route.query;
         // console.log("this.queryInfo",this.queryInfo);
         if(this.queryInfo && this.queryInfo.id) {
@@ -108,7 +108,13 @@ export default {
             this.$axios.get(
                 "/api/fund/" + row.id
             ).then(res => {
-                res.data.industry?res.data.industry:[];
+                let industryArr=[];
+                if(res.data.industry && res.data.industry.length>0){
+                    res.data.industry.some((val)=>{
+                        industryArr.push(val.enumId);
+                    })
+                }
+                res.data.industry=industryArr;
                 this.form = res.data;
             }).catch(err => {
                 // console.log(err);
@@ -131,13 +137,24 @@ export default {
                     if(this.form.status){
                         this.form.statusName=this.getEnumName(this.statusList,this.form.status);
                     }
-                    this.$axios.post(
-                        "/api/fund/save",
-                        this.form
-                    ).then(res => {
+                    let industry=[];
+                    if(this.form.industry && this.form.industry.length>0){
+                        this.form.industry.some((val)=>{
+                            industry.push({
+                                enumId:val,
+                                mainId: this.form.id,
+                            });
+                        })
+                    }
+                    this.$axios.post("/api/fund/save",
+                        this.$qs.stringify({
+                            fund: JSON.stringify(this.form),
+                            industry: JSON.stringify(industry),
+                        })
+                        ).then(res => {
                         if (res.data) {
-                            // this.$emit('detailShow',this.form) // 事件分发
-                            this.$message({ type: 'success', message: '保存成功' })
+                            this.$message({ type: 'success', message: '保存成功' });
+                            this.form.newFlag=0;
                         } else {
                             this.$message.error(res.data)
                         }

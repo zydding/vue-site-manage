@@ -8,14 +8,14 @@
                     <el-button v-if="this.$store.state.user.prop=='1'" @click="handleAdd" icon="el-icon-plus" size="small" type="primary" plain style="margin:10px 0px 10px 0px;">添加</el-button>
                     <el-form :model="formSearch" label-width="80px">
                         <el-form-item label="名称">
-                            <el-input placeholder="请输入标题" v-model="formSearch.title" class="input-with-select" size="small" clearable>
+                            <el-input placeholder="请输入标题" v-model="formSearch.name" class="input-with-select" size="small" clearable>
                             </el-input>
                         </el-form-item>
-                        <el-form-item label="类型">
-                            <el-select v-model="formSearch.type" placeholder="请选择">
+                        <el-form-item label="状态">
+                            <el-select v-model="formSearch.status" placeholder="请选择">
                                 <el-option value="" label="全部">全部</el-option>
                                 <el-option
-                                v-for="item in typeList"
+                                v-for="item in statusList"
                                 :key="item.id"
                                 :label="item.name"
                                 :value="item.id">
@@ -30,8 +30,10 @@
                         highlight-current-row>
                         <el-table-column prop="name" label="名称" width="300" header-align="center">
                             <!-- <template slot-scope="scope">
-                                <a class="activeLink" @click="modifyRow(scope.row)">{{scope.row.title}}</a>
+                                <a class="activeLink" @click="modifyRow(scope.row)">{{scope.row.name}}</a>
                             </template> -->
+                        </el-table-column>
+                        <el-table-column prop="industryName" label="行业" align="center">
                         </el-table-column>
                         <el-table-column prop="statusName" label="状态" align="center">
                         </el-table-column>
@@ -43,6 +45,9 @@
                             <template slot-scope="scope">
                                 <el-tooltip content="编辑" placement="top">
                                     <el-button size="mini" type="primary" icon="el-icon-edit" @click="modifyRow(scope.row)" circle plain></el-button>
+                                </el-tooltip>
+                                <el-tooltip content="明细" placement="top">
+                                    <el-button size="mini" type="primary" icon="el-icon-document" @click="details(scope.row)" circle plain></el-button>
                                 </el-tooltip>
                                 <el-tooltip content="删除" placement="top">
                                     <el-button size="mini" type="danger" icon="el-icon-delete" @click="deleteRow(scope.row)" circle plain></el-button>
@@ -58,44 +63,108 @@
                 </el-footer>
             </el-container>
         </el-main>
+        <!-- 明细 -->
+        <el-dialog class="full_height" title="基金明细" :visible.sync="visibleModel" width="60%">
+            <div>
+                <el-button @click="addSubData()" icon="el-icon-plus" size="small" type="primary" plain style="margin:10px 0px 10px 0px;">新增</el-button>
+                <el-button @click="deleteSub()" icon="el-icon-delete" size="small" type="primary" plain style="margin:10px 0px 10px 10px;">删除</el-button>
+            </div>
+            <vxe-table
+            :keep-source="true"
+            :data="subTableData" border size="mini"
+            :header-cell-style="{background:'#ECF5FF',color:'#606266',fontWeight:'bold'}"
+            style="width: 100%;" highlight-current-row
+            ref="xTable"
+            height="300"
+            :scroll-y="{gt:-1}"
+            :auto-resize="true"
+            :edit-config="{trigger: 'click', mode: 'cell'}">
+                <vxe-table-column type="checkbox" width="60"></vxe-table-column>
+                <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
+                <template v-for="item in tableCol">
+                    <vxe-table-column :key="item.label"
+                    :show-overflow="item.show_overflow"
+                    :field="item.prop" :title="item.label" :min-width="item.width"
+                    show-overflow-tooltip :align="item.align"
+                    :header-align="item.headerAlign" :fixed="item.fixed"
+                    :edit-render="item.edit_render">
+                        <template v-if="item.children">
+                            <vxe-table-column 
+                            v-for="(child, id) in item.children" :key="id" :field="child.prop"
+                            :show-overflow="child.show_overflow"
+                            :title="child.label" :align="item.align" :min-width="child.width"
+                            :header-align="child.headerAlign" show-overflow-tooltip
+                            :edit-render="child.edit_render">
+                            </vxe-table-column>
+                        </template>
+                    </vxe-table-column>
+                </template>
+            </vxe-table>
+            <el-pagination @size-change="handleSizeChange2" @current-change="handleCurrentChange2" :current-page="subPage" :page-sizes="[10, 20, 30, 50]" :page-size="subRows"
+                layout="total, sizes, prev, pager, next, jumper" :total="subTotal">
+            </el-pagination>
+            <div slot="footer" class="dialog-footer">
+                <el-button :loading="btn_loading" type="primary" @click="saveSub()">保 存</el-button>
+                <el-button @click="visibleModel = false">关 闭</el-button>
+            </div>
+        </el-dialog>
     </el-container>
 </template>
 
 <script>
 import getEnumList from './../../assets/js/common.js'
+import tableCol from './index'
 
 export default {
     name: 'FundIndex',
     data() {
         return {
+            tableCol: tableCol,
             tableData: [],
             loading: false,
             formSearch: {
-                title: '',
-                type: ''
+                name: '',
+                status: ''
             },
             page: 1,
             rows: 15,
             total: 0,
-            typeList:[],
+            statusList:[],
+            industryList: [],
+            visibleModel: false,
+            btn_loading: false,
+            subTableData: [],
+            subPage: 1,
+            subRows: 15,
+            subTotal: 0,
         }
     },
     async created() {
-        this.typeList = await getEnumList("fund_industry");
+        this.industryList = await getEnumList("fund_industry");
+        this.statusList = await getEnumList("fund_status");
         this.getTableData();
     },
     methods: {
         getTableData() {
             this.loading = true
             this.$axios.get(
-                "/api/fund/list?title="+this.formSearch.title +"&type="+ this.formSearch.type +"&page="+ this.page + "&row="+ this.rows
+                "/api/fund/list?name="+this.formSearch.name +"&status="+ this.formSearch.status +"&page="+ this.page + "&row="+ this.rows
             ).then(res => {
                 if(res.data.content){
-                    // res.data.content.map((item)=>{
-                    //     if(item.type){
-                    //         item.typeName = this.getTypeName(item.type);
-                    //     }
-                    // })
+                    res.data.content.map((item)=>{
+                        let industryName='';
+                        if(item.industry && item.industry.length>0){
+                            item.industry.map((item1)=>{
+                                this.industryList.some((val)=>{
+                                    if(item1.enumId==val.id){
+                                        industryName+='['+val.name+']';
+                                        return true;
+                                    }
+                                })
+                            })
+                        }
+                        item.industryName=industryName;
+                    })
                 }
                 this.tableData = res.data.content;
                 this.total = res.data.totalElements;
@@ -105,27 +174,15 @@ export default {
                 console.log(err);
             })
         },
-        // getTypeName(code){
-        //     let typeName = "";
-        //     this.typeList.some((item)=>{
-        //         if(item.key==code){
-        //             typeName= item.value;
-        //             return true;
-        //         }
-        //     })
-        //     return typeName;
-        // },
         handleSearch() {
             this.getTableData()
         },
         handleSizeChange(val) {
-            // console.log(`每页 ${val} 条`);
             this.rows = val
             this.page = 1
             this.getTableData()
         },
         handleCurrentChange(val) {
-            // console.log(`当前页: ${val}`);
             this.page = val
             this.getTableData()
         },
@@ -172,7 +229,77 @@ export default {
             })
             // window.open("../fundView?id=" + row.id);
         },
+        //基金记录
+        details(row){
+            this.$axios.get(
+                "/api/fund/getDetails/"+row.id
+            ).then(res => {
+                if(res.data.content){
+                    // res.data.content.map((item)=>{
 
+                    // })
+                }
+                this.subTableData = res.data.content;
+                this.visibleModel=true;
+            }).catch(err => {
+                console.log(err);
+            })
+        },
+        handleSizeChange2(val) {
+            this.subRows = val
+            this.subPage = 1
+            this.details()
+        },
+        handleCurrentChange2(val) {
+            this.subPage = val
+            this.details()
+        },
+        //新增详细数据
+        async addSubData(row){
+            let record = {
+                fillDate: new Date(),
+            }
+            let { row: newRow } = await this.$refs.xTable.insertAt(record, row);
+            await this.$refs.xTable.setActiveCell(newRow);
+        },
+        saveSub(){
+            this.btn_loading=true;
+            const { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getRecordset();
+            console.log(insertRecords, removeRecords, updateRecords);
+        },
+        deleteSub(data){
+            this.$confirm('此操作将永久删除该数据 ' + data.name + ', 是否继续?', '提示', {
+                cancelButtonClass: "btn-custom-cancel",
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.delCommit(data)
+            }).catch(() => {});
+        },
+        //删除数据
+        delCommit(data) {
+            this.$axios({
+                method: 'delete',
+                url: '/quality/report/economy/'+ data.id,
+            }).then(res => {
+                if (res.data.succeed) {
+                    this.getTableData()
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                } else {
+                    this.$message({
+                        message: res.data.msg,
+                        showClose: true,
+                        type: 'error'
+                    })
+                }
+            }).catch(error => {
+                console.log('error:' + error.toString())
+            })
+        },
     },
     watch:{
         $route(newVal, oldVal){
@@ -238,7 +365,7 @@ export default {
     color: #606266;
 }
 </style>
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .demo-ruleForm {
     .el-upload-list {
         flex-flow: row wrap;

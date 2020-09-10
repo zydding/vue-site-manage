@@ -52,3 +52,7 @@ a{
 .el-tag.active .el-tag__close{
     color: #fff !important;
 }
+
+.vxe-input--panel{
+    z-index: 1000000 !important;
+}

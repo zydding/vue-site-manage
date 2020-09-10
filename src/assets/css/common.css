@@ -1,0 +1,62 @@
+body, html, #app {
+  width: 100%;
+  height: 100%;
+  background-color: #fdfdfd;
+  position: relative;
+  margin: 0;
+}
+
+body .el-container, html .el-container, #app .el-container {
+  height: 100%;
+}
+
+a {
+  text-decoration: none;
+}
+
+.nopadding {
+  padding: 0 0px;
+}
+
+.nopadding {
+  padding: 0 !important;
+}
+
+.search_head {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search_head .el-form {
+  flex: 1;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.search_head .el-form .el-form-item {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 0px;
+}
+
+.search_head .el-form .el-form-item .el-form-item__content {
+  margin-left: 0 !important;
+}
+
+.search_head .el-form .el-form-item .el-form-item__content .el-input {
+  margin-top: 0 !important;
+}
+
+.el-tag.active .el-tag__close {
+  color: #fff !important;
+}
+
+.vxe-input--panel {
+  z-index: 1000000 !important;
+}

@@ -68,6 +68,15 @@ Vue.prototype.$axios = Axios
 
 Vue.use(VueAxios, Axios);
 
+import qs from 'qs'
+Vue.prototype.$qs = qs
+
+import 'xe-utils'
+import VXETable from 'vxe-table'
+import 'vxe-table/lib/index.css'
+
+Vue.use(VXETable)
+
 
 new Vue({
   store,

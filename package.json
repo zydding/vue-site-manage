@@ -13,11 +13,14 @@
     "element-ui": "^2.10.1",
     "es6-promise": "^4.2.8",
     "less-loader": "^5.0.0",
+    "qs": "^6.9.4",
     "vue": "^2.6.10",
     "vue-axios": "^2.1.4",
     "vue-quill-editor": "^3.0.6",
     "vue-router": "^3.0.3",
-    "vuex": "^3.3.0"
+    "vuex": "^3.3.0",
+    "vxe-table": "^2.9.19",
+    "xe-utils": "^2.7.9"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",
