@@ -96,6 +96,7 @@ export default {
         code: this.model.code,
         pwd: this.model.password
       });
+      this.loading=true;
     }
   }
 };

@@ -8,6 +8,7 @@
                     <el-form :model="formSearch" label-width="80px">
                         <el-form-item label="名称">
                             <el-date-picker
+                            size="small"
                             v-model="formSearch.time"
                             value-format="yyyy-MM-dd"
                             type="daterange"

@@ -60,3 +60,7 @@ a {
 .vxe-input--panel {
   z-index: 1000000 !important;
 }
+
+.el-dialog__body {
+  padding: 10px 10px;
+}

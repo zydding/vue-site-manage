@@ -12,7 +12,9 @@
                             </el-input>
                         </el-form-item>
                         <el-form-item label="类型">
-                            <el-select v-model="formSearch.type" placeholder="请选择">
+                            <el-select
+                            size="small"
+                             v-model="formSearch.type" placeholder="请选择">
                                 <el-option value="" label="全部">全部</el-option>
                                 <el-option
                                 v-for="item in typeList"

@@ -12,7 +12,9 @@
                             </el-input>
                         </el-form-item>
                         <el-form-item label="状态">
-                            <el-select v-model="formSearch.status" placeholder="请选择">
+                            <el-select
+                            size="small"
+                             v-model="formSearch.status" placeholder="请选择">
                                 <el-option value="" label="全部">全部</el-option>
                                 <el-option
                                 v-for="item in statusList"
@@ -67,7 +69,7 @@
         <el-dialog class="full_height" title="基金明细" :visible.sync="visibleModel" width="60%">
             <div>
                 <el-button @click="addSubData()" icon="el-icon-plus" size="small" type="primary" plain style="margin:10px 0px 10px 0px;">新增</el-button>
-                <el-button @click="deleteSub()" icon="el-icon-delete" size="small" type="primary" plain style="margin:10px 0px 10px 10px;">删除</el-button>
+                <!-- <el-button @click="deleteSub()" icon="el-icon-delete" size="small" type="primary" plain style="margin:10px 0px 10px 10px;">删除</el-button> -->
             </div>
             <vxe-table
             :keep-source="true"
@@ -99,6 +101,13 @@
                         </template>
                     </vxe-table-column>
                 </template>
+                <vxe-table-column title="操作" width="100" align="center">
+                    <template slot-scope="scope">
+                        <el-tooltip content="删除" placement="top">
+                            <el-button size="mini" type="danger" icon="el-icon-delete" @click="deleteSub(scope.row)" circle plain></el-button>
+                        </el-tooltip>
+                    </template>
+                </vxe-table-column>
             </vxe-table>
             <el-pagination @size-change="handleSizeChange2" @current-change="handleCurrentChange2" :current-page="subPage" :page-sizes="[10, 20, 30, 50]" :page-size="subRows"
                 layout="total, sizes, prev, pager, next, jumper" :total="subTotal">
@@ -137,6 +146,7 @@ export default {
             subPage: 1,
             subRows: 15,
             subTotal: 0,
+            currentData: {},
         }
     },
     async created() {
@@ -229,10 +239,16 @@ export default {
             })
             // window.open("../fundView?id=" + row.id);
         },
-        //基金记录
         details(row){
+            console.log(row);
+            this.currentData=row;
+            // return;
+            this.getDetails();
+        },
+        //基金记录
+        getDetails(){
             this.$axios.get(
-                "/api/fund/getDetails/"+row.id
+                "/api/fund/getDetails/"+this.currentData.id+"?page="+this.subPage+"&row="+this.subRows
             ).then(res => {
                 if(res.data.content){
                     // res.data.content.map((item)=>{
@@ -240,6 +256,7 @@ export default {
                     // })
                 }
                 this.subTableData = res.data.content;
+                this.subTotal=res.data.totalElements
                 this.visibleModel=true;
             }).catch(err => {
                 console.log(err);
@@ -248,27 +265,53 @@ export default {
         handleSizeChange2(val) {
             this.subRows = val
             this.subPage = 1
-            this.details()
+            this.getDetails()
         },
         handleCurrentChange2(val) {
             this.subPage = val
-            this.details()
+            this.getDetails()
         },
         //新增详细数据
         async addSubData(row){
             let record = {
+                mainId: this.currentData.id,
                 fillDate: new Date(),
             }
             let { row: newRow } = await this.$refs.xTable.insertAt(record, row);
-            await this.$refs.xTable.setActiveCell(newRow);
+            await this.$refs.xTable.setActiveCell(newRow,'fillDate');
         },
         saveSub(){
-            this.btn_loading=true;
             const { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getRecordset();
-            console.log(insertRecords, removeRecords, updateRecords);
+            // console.log(insertRecords, removeRecords, updateRecords);
+            if((insertRecords && insertRecords.length>0) || (removeRecords && removeRecords.length>0) 
+            || (updateRecords && updateRecords.length>0)){
+                
+                }else{
+                    this.$message.warning("没有修改任何记录!");
+                return;
+            }
+            this.btn_loading=true;
+            this.$axios.post("/api/fund/saveDetails",
+                this.$qs.stringify({
+                    insertList: JSON.stringify(insertRecords),
+                    deleteList: JSON.stringify(removeRecords),
+                    updateList: JSON.stringify(updateRecords),
+                })
+            ).then(res => {
+                if (res.data) {
+                    this.$message({ type: 'success', message: '保存成功' });
+                    this.getDetails();
+                } else {
+                    this.$message.error(res.data)
+                }
+                this.btn_loading=false;
+            }).catch(err => {
+                this.btn_loading=false;
+                console.log(err);
+            })
         },
         deleteSub(data){
-            this.$confirm('此操作将永久删除该数据 ' + data.name + ', 是否继续?', '提示', {
+            this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
                 cancelButtonClass: "btn-custom-cancel",
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -281,17 +324,17 @@ export default {
         delCommit(data) {
             this.$axios({
                 method: 'delete',
-                url: '/quality/report/economy/'+ data.id,
+                url: '/api/fund/delDetail/'+ data.id,
             }).then(res => {
-                if (res.data.succeed) {
-                    this.getTableData()
+                if (res.data) {
+                    this.getDetails();
                     this.$message({
                         type: 'success',
                         message: '删除成功!'
                     });
                 } else {
                     this.$message({
-                        message: res.data.msg,
+                        message: res.data,
                         showClose: true,
                         type: 'error'
                     })
