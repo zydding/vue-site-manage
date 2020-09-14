@@ -99,7 +99,8 @@ export default {
         },
         onEditorChange() {
             //内容改变事件
-            this.$emit("input", this.content);
+            let quill = this.$refs.myQuillEditor.quill;
+            this.$emit("input", {content: this.content,text: quill.getText(0,200)});
         },
 
         // 富文本图片上传前

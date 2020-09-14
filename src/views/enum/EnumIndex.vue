@@ -57,7 +57,7 @@ export default {
             loading: false,
             title: "",
             page: 1,
-            rows: 15,
+            rows: 10,
             total: 0,
             defaultProps:{
                 // children: 'children',

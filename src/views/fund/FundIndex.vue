@@ -136,7 +136,7 @@ export default {
                 status: ''
             },
             page: 1,
-            rows: 15,
+            rows: 10,
             total: 0,
             statusList:[],
             industryList: [],
@@ -144,7 +144,7 @@ export default {
             btn_loading: false,
             subTableData: [],
             subPage: 1,
-            subRows: 15,
+            subrows: 10,
             subTotal: 0,
             currentData: {},
         }

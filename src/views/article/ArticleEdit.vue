@@ -198,7 +198,8 @@ export default {
             })
         },
         changContent(val) {
-            this.form.content = val
+            this.form.content = val.content;
+            this.form.contentStr = val.text;
         },
     },
 }
