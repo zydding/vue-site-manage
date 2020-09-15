@@ -76,6 +76,7 @@
 
 <script>
 import getEnumList from './../../assets/js/common.js'
+import mixin from './../../assets/js/mixin.js'
 
 export default {
     name: 'ArticleIndex',
@@ -185,7 +186,6 @@ export default {
             })
             // window.open("../articleView?id=" + row.id);
         },
-
     },
     watch:{
         $route(newVal, oldVal){
@@ -194,8 +194,10 @@ export default {
             if(oldVal.path==="/articleEdit"){
                 this.getTableData();
             }
-		},
-	},
+        },
+    },
+    computed: mixin.computed,
+    watch: mixin.watch,
 }
 </script>
 

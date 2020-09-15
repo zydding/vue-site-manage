@@ -123,6 +123,7 @@
 <script>
 import getEnumList from './../../assets/js/common.js'
 import tableCol from './index'
+import mixin from './../../assets/js/mixin.js'
 
 export default {
     name: 'FundIndex',
@@ -144,7 +145,7 @@ export default {
             btn_loading: false,
             subTableData: [],
             subPage: 1,
-            subrows: 10,
+            subRows: 10,
             subTotal: 0,
             currentData: {},
         }
@@ -351,8 +352,10 @@ export default {
             if(oldVal.path==="/fundEdit"){
                 this.getTableData();
             }
-		},
-	},
+        },
+    },
+    computed: mixin.computed,
+    watch: mixin.watch,
 }
 </script>
 

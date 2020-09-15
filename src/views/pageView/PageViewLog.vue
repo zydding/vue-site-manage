@@ -47,7 +47,7 @@
 </template>
 
 <script>
-
+import mixin from './../../assets/js/mixin.js'
 export default {
     name: 'PageViewLog',
     data() {
@@ -127,7 +127,9 @@ export default {
             this.page = val
             this.getTableData()
         },
-    }
+    },
+    computed: mixin.computed,
+    watch: mixin.watch,
 }
 </script>
 

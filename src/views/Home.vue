@@ -47,7 +47,7 @@
 						<el-main class="nopadding">
 							<transition name="move" mode="out-in">
 								<keep-alive>
-									<router-view v-if="$route.meta.isRouter"></router-view>
+									<router-view ref="router_view" v-if="$route.meta.isRouter"></router-view>
 								</keep-alive>
 							</transition>
 							<router-view v-if="!$route.meta.isRouter"></router-view>
@@ -224,6 +224,7 @@ export default {
 					], 
 				}, 
 			],
+			closedPath: '',
         };
     },
     name:'Home',
@@ -242,10 +243,17 @@ export default {
 			this.tags.splice(this.tags.indexOf(tag), 1);
 			if(tag.isActive){
 				let active = this.tags[this.tags.length-1];
+				//这里用来判断页面关闭属性，在页面watch路由变化，判断new的prevClosed属性，为真销毁old页面
+				active.params={prevClosed: 1};
 				this.$router.push(active);
 				//选择最后一个
 				this.handSelect(active.path);
 			}
+			this.$store.commit("menuList/delItem",tag);
+			// console.log(this.$refs.router_view,this.$refs.router_view.$vnode);
+			// if(this.$refs.router_view){
+			// 	this.$refs.router_view.$options.destroyed[0];
+			// }
 		},
 		handleAdd() {
 			let inputValue = this.inputValue;
@@ -310,13 +318,16 @@ export default {
 				if(route.fullPath=="/home"){
 					isClose=false;
 				}
-                this.tags.push({
+				let menuObj={
                     title: route.name,
                     path: route.fullPath,
 					name: route.name,
 					isClose: isClose,
 					isActive: true,
-                })
+					closed: false,
+				};
+                this.tags.push(menuObj);
+				this.$store.commit("menuList/addItem",menuObj);
             }
         },
 	},

@@ -124,7 +124,7 @@
 </template>
 
 <script>
-
+import mixin from './../../assets/js/mixin.js'
 export default {
     name: 'UserIndex',
     data() {
@@ -236,7 +236,9 @@ export default {
                 console.log(err);
             })
         },
-    }
+    },
+    computed: mixin.computed,
+    watch: mixin.watch,
 }
 </script>
 

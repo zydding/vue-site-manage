@@ -47,7 +47,7 @@
 </template>
 
 <script>
-
+import mixin from './../../assets/js/mixin.js'
 export default {
     name: 'EnumIndex',
     data() {
@@ -209,7 +209,9 @@ export default {
                 this.getTableData();
             }
 		},
-	},
+    },
+    computed: mixin.computed,
+    watch: mixin.watch,
 }
 </script>
 
