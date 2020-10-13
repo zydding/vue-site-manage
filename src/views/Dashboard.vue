@@ -38,7 +38,17 @@ export default {
 				for(let i=this.formSearch.day-1;i>=0;i--){
 					var day1 = new Date();
 					day1.setTime(day1.getTime()-i*24*60*60*1000);
-					var s1 = day1.getFullYear()+"-0" + (day1.getMonth()+1) + "-" + day1.getDate();
+					var s1 =  day1.getFullYear();
+					if(day1.getMonth()+1<10){
+						s1 +="-0" + (day1.getMonth()+1);
+					}else{
+						s1 += "-" + (day1.getMonth()+1);
+					}
+					if(day1.getDate()<10){
+						s1+= "-0" + day1.getDate();
+					}else{
+						s1+= "-" +day1.getDate();
+					}
 					let dataItem={
 						ipcount: 0,
 						pageview: 0,
