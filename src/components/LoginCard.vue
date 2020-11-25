@@ -59,6 +59,9 @@ export default {
     Footer
   },
   name: "login",
+  props:{
+    loading: Boolean,
+  },
   data() {
     return {
       validCredentials: {
@@ -69,7 +72,6 @@ export default {
         code: "visitor",
         password: "12345"
       },
-      loading: false,
       //输入限制规则
       rules: {
         code: [
@@ -96,7 +98,6 @@ export default {
         code: this.model.code,
         pwd: this.model.password
       });
-      this.loading=true;
     }
   }
 };

@@ -4,7 +4,7 @@
       <!-- <img width="160" src="./../assets/logo.png" alt=""> -->
       <!-- <p class="title">登录</p> -->
     </div>
-    <LoginCard @clickLogin="clickLogin($event,{})" />
+    <LoginCard :loading="loading" @clickLogin="clickLogin($event,{})" />
   </div>
 </template>
 
@@ -22,11 +22,12 @@ export default {
   },
   data() {
     return {
-
+      loading: false,
     }
   },
   methods: {
     clickLogin(userInfo) {
+      this.loading=true;
       sessionStorage.setItem("isLogin", true);
       this.$axios
         .post("/api/login/check?code="+ userInfo.code+"&pwd="+ userInfo.pwd)
@@ -48,10 +49,12 @@ export default {
               // console.log("error:" + error.toString());
             }
           }
+          this.loading=false;
         })
         .catch(error => {
-            this.$message.error("异常！");
-            console.log("error:" + error.toString());
+          this.$message.error("异常！");
+          this.loading=false;
+          console.log("error:" + error.toString());
         });
     }
   },
