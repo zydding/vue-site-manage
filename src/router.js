@@ -205,6 +205,13 @@ var router_ = new Router({
 })
 
 router_.beforeEach((to, from, next) => {
+  if(to.path==="/"){
+    //重定向登录界面
+    next({
+      path: '/login',
+      query: { redirect: to.fullPath }
+    })
+  }
   if (to.matched.some(r => r.meta.requireAuth)) {
     var loginInfo = sessionStorage.getItem('logined')
     // console.log(loginInfo);
