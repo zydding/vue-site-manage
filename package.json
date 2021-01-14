@@ -11,8 +11,6 @@
     "core-js": "^2.6.5",
     "echarts": "^4.7.0",
     "element-ui": "^2.10.1",
-    "es6-promise": "^4.2.8",
-    "less-loader": "^5.0.0",
     "qs": "^6.9.4",
     "vue": "^2.6.10",
     "vue-axios": "^2.1.4",
@@ -23,12 +21,10 @@
     "xe-utils": "^2.7.9"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.6",
-    "@babel/preset-env": "^7.9.6",
+    "@vue/cli-plugin-babel": "^3.9.0",
     "@vue/cli-service": "^3.9.0",
-    "babel-loader": "^8.0.0-beta.0",
-    "babel-plugin-component": "^1.1.1",
     "less": "^3.9.0",
+    "less-loader": "^5.0.0",
     "sass": "^1.18.0",
     "sass-loader": "^7.1.0",
     "vue-template-compiler": "^2.6.10"

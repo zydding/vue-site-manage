@@ -11,7 +11,7 @@ export default {
             let name = this.$options.name.toLowerCase();
             if(e && e.length>0){
                 let targe=0;
-                // console.log(name,e);
+                console.log('当前',name);
                 e.some((val)=>{
                     if(val.path.toLowerCase().indexOf(name)!=-1){
                         targe=1;
@@ -19,6 +19,7 @@ export default {
                     }
                 })
                 if(targe===0){
+                    console.log('销毁',this.$options.name);
                     this.$destroy()
                 }
             }

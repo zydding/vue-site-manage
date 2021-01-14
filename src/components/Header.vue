@@ -86,7 +86,7 @@ export default {
                 pwdNew: [{ validator: validatePass, trigger: "blur" }],
                 pwdRe: [{ validator: validatePass2, trigger: "blur" }]
             },
-            userName: "zeke",
+            userName: "",
         };
     },
     mounted(){

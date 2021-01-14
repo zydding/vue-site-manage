@@ -353,9 +353,9 @@ export default {
                 this.getTableData();
             }
         },
+        keepAliveConf:mixin.watch.keepAliveConf
     },
     computed: mixin.computed,
-    watch: mixin.watch,
 }
 </script>
 
