@@ -209,7 +209,8 @@ router_.beforeEach((to, from, next) => {
     //重定向登录界面
     let hostUrl = window.location.host;
     let protocol = window.location.protocol;
-    window.location.href = protocol + "//" + hostUrl + '/login?redirect=/home';
+    // window.location.href = protocol + "//" + hostUrl + '/site/login?redirect=/home';
+    window.location.replace('./login');
   }
   if (to.matched.some(r => r.meta.requireAuth)) {
     var loginInfo = sessionStorage.getItem('logined')
@@ -220,7 +221,8 @@ router_.beforeEach((to, from, next) => {
       //重定向登录界面
       let hostUrl = window.location.host;
       let protocol = window.location.protocol;
-      window.location.href = protocol + "//" + hostUrl + '/login?redirect=/home';
+      // window.location.href = protocol + "//" + hostUrl + '/site/login?redirect=/home';
+      window.location.replace('./login');
       // next({
       //   path: '/login',
       //   query: { redirect: to.fullPath }
