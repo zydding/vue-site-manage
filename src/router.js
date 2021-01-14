@@ -207,10 +207,9 @@ var router_ = new Router({
 router_.beforeEach((to, from, next) => {
   if(to.path==="/"){
     //重定向登录界面
-    next({
-      path: '/login',
-      query: { redirect: to.fullPath }
-    })
+    let hostUrl = window.location.host;
+    let protocol = window.location.protocol;
+    window.location.href = protocol + "//" + hostUrl + '/login?redirect=/home';
   }
   if (to.matched.some(r => r.meta.requireAuth)) {
     var loginInfo = sessionStorage.getItem('logined')
@@ -219,10 +218,13 @@ router_.beforeEach((to, from, next) => {
         next()
     } else {
       //重定向登录界面
-      next({
-        path: '/login',
-        query: { redirect: to.fullPath }
-      })
+      let hostUrl = window.location.host;
+      let protocol = window.location.protocol;
+      window.location.href = protocol + "//" + hostUrl + '/login?redirect=/home';
+      // next({
+      //   path: '/login',
+      //   query: { redirect: to.fullPath }
+      // })
     }
   } else {
     next()
