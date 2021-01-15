@@ -18,7 +18,7 @@
                                 <a class="activeLink" @click="modifyRow(scope.row)">{{scope.row.name}}</a>
                             </template> -->
                         </el-table-column>
-                        <el-table-column prop="code" label="登录名" width="100" header-align="center" fixed>
+                        <el-table-column v-if="this.$store.state.user.prop=='1'" prop="code" label="登录名" width="100" header-align="center" fixed>
                         </el-table-column>
                         <el-table-column label="是否能用" align="center">
                             <template slot-scope="scope">
@@ -191,7 +191,7 @@ export default {
         //编辑
         modifyRow(row) {
             // console.log(row);
-            this.form = row;
+            this.form = Object.assign({},row);
             this.dialogAddFormVisible=true;
         },
         deleteRow(row) {
@@ -217,13 +217,22 @@ export default {
 
         },
         saveForm(){
-            var params = new FormData();
-            for(let i in this.form){
-                params.append(i,this.form[i]);
+            // var params = new FormData();
+            // for(let i in this.form){
+            //     params.append(i,this.form[i]);
+            // }
+            let validFlag=false;
+            this.$refs["form"].validate((valid) => {
+                if (valid) {
+                    validFlag=true;
+                }
+            })
+            if(!validFlag){
+                return;
             }
             this.$axios.post(
                 "/api/user/save",
-                params
+                this.form
             ).then(res => {
                 if (res.data) {
                     this.dialogAddFormVisible=false;

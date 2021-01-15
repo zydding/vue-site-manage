@@ -7,7 +7,7 @@ module.exports = {
         proxy: {
             '/api': {
                 target: 'https://zekeup.com/',
-                // target: 'http://127.0.0.1:9081',
+                // target: 'http://127.0.0.1:9081/',
                 changeOrigin: true,
                 ws: true,
                 // pathRewrite: {
