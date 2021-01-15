@@ -11,6 +11,7 @@
                     :on-error="uploadError"
                     :data="{'bizPk': (this.parentMsg && this.parentMsg.bizPk)?this.parentMsg.bizPk:'','bizType': this.parentMsg.bizType,'orderNum': this.tableData.length+1,}"
                     :limit="1"
+                    :headers="{'Zeke_Up':'1'}"
                     :auto-upload="true"
                     :show-file-list="false"
                     >

@@ -9,6 +9,7 @@
         :on-remove="handleRemove"
         :multiple ="multiple"
         :data="fileData1"
+        :headers="{'Zeke_Up':'1'}"
         :on-success="handleAvatarSuccess">
         <i class="el-icon-plus"></i>
         <!-- <el-button style="margin:10px 0px 10px 10px;" size="small" icon="el-icon-plus" type="primary">选择文件</el-button> -->
