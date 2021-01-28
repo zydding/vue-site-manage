@@ -38,8 +38,8 @@ export default {
             this.$store.commit("user/setProp",response.data.role);
             sessionStorage.setItem("logined", true);
             sessionStorage.setItem("login_name", response.data.name);
-            // this.$router.replace('home');
-            window.location.replace('./home');
+            this.$router.replace('/home');
+            // window.location.replace('./home');
           }else{
             if(response.status==244){
                 //用户密码错误
